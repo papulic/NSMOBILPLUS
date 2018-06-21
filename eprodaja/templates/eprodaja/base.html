@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="sr"  lang="sr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <title>NSmobilplus | {% block title %}{% endblock %}</title>
+    {% load staticfiles %}
+    <link rel="shortcut icon" type="image/png" href="{%  static 'eprodaja/favicon.ico' %}"/>
+    <link href="{%  static 'eprodaja/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{%  static 'eprodaja/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{%  static 'eprodaja/css/prettyPhoto.css' %}" rel="stylesheet">
+    <link href="{%  static 'eprodaja/css/price-range.css' %}" rel="stylesheet">
+    <link href="{%  static 'eprodaja/css/animate.css' %}" rel="stylesheet">
+    <link href="{%  static 'eprodaja/css/main.css' %}" rel="stylesheet">
+    <link href="{%  static 'eprodaja/css/responsive.css' %}" rel="stylesheet">
+</head><!--/head-->
+
+<body>
+    <header id="header"><!--header-->
+        <div class="header_top"><!--header_top-->
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="contactinfo">
+                            <ul class="nav nav-pills">
+                                <li><a href="tel:+38160-755-00-57"><i class="fa fa-phone"></i> +381 60 755 00 57</a></li>
+                                <li><a href="mailto:papulic@gmail.com?Subject=Hello%20NSmobilePlus" target="_top"><i class="fa fa-envelope"></i> papulic@gmail.com</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="social-icons pull-right">
+                            <ul class="nav navbar-nav">
+                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!--/header_top-->
+        
+        <div class="header-middle"><!--header-middle-->
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="logo pull-left">
+                            <a href="{% url 'eprodaja:index' %}"><img width="154" height="35" src="{%  static 'eprodaja/images/home/NSmobilPlusLogo.jpg' %}" alt="" /></a>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="shop-menu pull-right">
+                            <ul class="nav navbar-nav">
+                                <li><a href="#"><i class="fa fa-user"></i> Moj nalog</a></li>
+                                <li><a href="#"><i class="fa fa-star"></i> Omiljeni proizvodi</a></li>
+                                <li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Korpa</a></li>
+                                <li><a href="login.html"><i class="fa fa-lock"></i> Uloguj se</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="shop-menu">
+                            <ul class="nav navbar-nav">
+                                <li><a href="{% url 'eprodaja:index' %}"><i class="fa fa-home"></i> Početna</a></li>
+                                <li><a href="#"><i class="fa fa-info"></i> O nama</a></li>
+                                <li><a href="#"><i class="fa fa-truck"></i> Dostava proizvoda</a></li>
+                                <li><a href="#"><i class="fa fa-comment"></i> Kontakt</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!--/header-middle-->
+
+{% block content %}
+
+{% endblock %}
+
+<footer id="footer"><!--Footer-->
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="companyinfo">
+                            <h2><span>NS</span>-MOBILPLUS</h2>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,sed do eiusmod tempor</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-7">
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="address">
+                            <img src="{%  static 'eprodaja/images/home/map.png' %}" alt="" />
+                            <p>Jevrejska 19, 21000 Novi Sad. Srbija</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row">
+                    <p class="pull-left">Copyright © 2018 N&S MOBIL PLUS Sva prava zadržana.</p>
+                    <p class="pull-right">Designed by <a href="mailto:papulic@gmail.com?Subject=Hello%20OSwebdev" target="_top">
+                    <img width="100" height="43" src="{%  static 'eprodaja/images/home/OSwebdev.png' %}"></a></p>
+                </div>
+            </div>
+        </div>
+        
+    </footer><!--/Footer-->
+    
+
+  
+    <script src="{% static 'eprodaja/js/jquery.js' %}"></script>
+    <script src="{% static 'eprodaja/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'eprodaja/js/jquery.scrollUp.min.js' %}"></script>
+    <script src="{% static 'eprodaja/js/price-range.js' %}"></script>
+    <script src="{% static 'eprodaja/js/jquery.prettyPhoto.js' %}"></script>
+    <script src="{% static 'eprodaja/js/main.js' %}"></script>
+</body>
+</html>
