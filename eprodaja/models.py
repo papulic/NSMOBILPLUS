@@ -2,16 +2,20 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.contrib.auth.models import Permission, User
 
 
-class Kategorija(models.Model):
-    kategorija = models.CharField(max_length=30)
 
-    def __unicode__(self):
-        return self.kategorija
 
-    class Meta:
-        verbose_name_plural = "Kategorije"
+
+# class Kategorija(models.Model):
+#     kategorija = models.CharField(max_length=30)
+#
+#     def __str__(self):
+#         return self.kategorija
+#
+#     class Meta:
+#         verbose_name_plural = "Kategorije"
 
 
 Marke = (
@@ -35,8 +39,22 @@ class Artikal(models.Model):
     cena = models.FloatField(max_length=10)
 
     def __str__(self):
-        return self.kategorija.kategorija
+        return self.kategorija + " - " + self.marka + " - " + self.model
 
     class Meta:
         verbose_name_plural = "Artikli"
 
+
+class Korpa(models.Model):
+    user = models.ForeignKey(User, default=1)
+    grad = models.CharField(max_length=25)
+    postanski_broj = models.IntegerField()
+    adresa = models.CharField(max_length=50)
+    kontakt_telefon = models.IntegerField()
+    artikli = models.ManyToManyField(Artikal)
+
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        verbose_name_plural = "Korpe kupaca"
