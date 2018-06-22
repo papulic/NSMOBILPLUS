@@ -12,4 +12,7 @@ from .forms import UserForm
 
 
 def index(request):
-    return render(request, 'eprodaja/index.html')
+    user = None
+    if request.user.is_authenticated():
+        user = request.user
+    return render(request, 'eprodaja/index.html', {'user': user})
