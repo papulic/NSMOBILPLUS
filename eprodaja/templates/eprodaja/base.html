@@ -47,6 +47,15 @@
                         <div class="logo pull-left">
                             <a href="{% url 'eprodaja:index' %}"><img width="154" height="35" src="{%  static 'eprodaja/images/home/NSmobilPlusLogo.jpg' %}" alt="" /></a>
                         </div>
+                        <div class="logo">
+                            {% if user.is_staff %}
+                            <a href="#">
+                                <button type="button" class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-user"></span>&nbsp; Korisnici
+                                </button>
+                            </a>
+                            {% endif %}
+                        </div>
                     </div>
                     <div class="col-sm-8">
                         <div class="shop-menu pull-right">
@@ -54,7 +63,11 @@
                                 <li><a href="#"><i class="fa fa-user"></i> Moj nalog</a></li>
                                 <li><a href="#"><i class="fa fa-star"></i> Omiljeni proizvodi</a></li>
                                 <li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Korpa</a></li>
+                                {% if user.is_authenticated %}
+                                <li><a href="logout.html">Pozdrav {{ user.username }}, izloguj se <i class="fa fa-unlock"></i></a></li>
+					            {% else %}
                                 <li><a href="login.html"><i class="fa fa-lock"></i> Uloguj se</a></li>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>
@@ -73,7 +86,7 @@
                 </div>
             </div>
         </div><!--/header-middle-->
-
+    </header>
 {% block content %}
 
 {% endblock %}
