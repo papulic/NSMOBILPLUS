@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import Permission, User
+from django.core.validators import RegexValidator
 
 
 
@@ -16,6 +17,19 @@ from django.contrib.auth.models import Permission, User
 #
 #     class Meta:
 #         verbose_name_plural = "Kategorije"
+
+class Detalji_korisnika(models.Model):
+    korisnik = models.OneToOneField(User, on_delete=models.CASCADE)
+    adresa = models.CharField(max_length=50)
+    postanski_broj = models.IntegerField(validators=[RegexValidator(regex='^.{5}$', message='Poštanski broj mora imati 5 cifara', code='Poštanski broj mora imati 5 cifara')])
+    grad = models.CharField(max_length=25)
+    kontakt_telefon = models.CharField(max_length=15)
+
+    def __str__(self):
+        return self.korisnik.username
+
+    class Meta:
+        verbose_name_plural = "Detalji korisnika"
 
 
 Marke = (
@@ -33,10 +47,13 @@ Kategorije = (
 )
 
 class Artikal(models.Model):
-    model = models.CharField(max_length=100, blank=True)
+    model = models.CharField(max_length=100)
     marka = models.CharField(max_length=10, choices=Marke)
     kategorija = models.CharField(max_length=10, choices=Kategorije)
-    cena = models.FloatField(max_length=10)
+    slika = models.ImageField(null=True, blank=True)
+    cena = models.DecimalField(decimal_places=2, max_digits=10)
+    na_stanju = models.BooleanField(default=True)
+    na_akciji = models.BooleanField(default=False)
 
     def __str__(self):
         return self.kategorija + " - " + self.marka + " - " + self.model
@@ -46,15 +63,19 @@ class Artikal(models.Model):
 
 
 class Korpa(models.Model):
-    user = models.ForeignKey(User, default=1)
-    grad = models.CharField(max_length=25)
-    postanski_broj = models.IntegerField()
-    adresa = models.CharField(max_length=50)
-    kontakt_telefon = models.IntegerField()
-    artikli = models.ManyToManyField(Artikal)
+    user = models.ForeignKey(User, related_name='korpe')
+    datum = models.DateField(auto_now_add=True)
+    artikli = models.ManyToManyField(Artikal, related_name='korpe', blank=True)
+    ukupno = models.DecimalField(decimal_places=2, max_digits=10, default=0.00)
+    potvrdjena = models.BooleanField(default=False)
+    otpremljena = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.user.username
+        return self.user.username + " - id: " + str(self.user.id)
+
+    def artikli_u_korpi(self):
+        return ", ".join([str(artikal.id) for artikal in self.artikli.all()])
+
 
     class Meta:
         verbose_name_plural = "Korpe kupaca"
