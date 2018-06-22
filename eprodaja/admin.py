@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
-from .models import Artikal, Korpa, Detalji_korisnika
+from .models import Artikal, Korpa, Detalji_korisnika, Omiljeni_proizvodi
 
 
 
@@ -30,8 +30,14 @@ class Detalji_korisnikaModelAdmin(admin.ModelAdmin):
     list_filter = ["korisnik__username"]
 
 
+class Omiljeni_proizvodiModelAdmin(admin.ModelAdmin):
+    list_display = ["user"]
+    list_filter = ["user__username"]
+
+
 admin.site.register(Detalji_korisnika, Detalji_korisnikaModelAdmin)
 admin.site.register(Artikal, ArtikalModelAdmin)
 admin.site.register(Korpa, KorpaModelAdmin)
+admin.site.register(Omiljeni_proizvodi, Omiljeni_proizvodiModelAdmin)
 # admin.site.register(Kategorija, KategorijaModelAdmin)
 # admin.site.register(Marka, MarkaModelAdmin)

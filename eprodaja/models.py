@@ -79,3 +79,14 @@ class Korpa(models.Model):
 
     class Meta:
         verbose_name_plural = "Korpe kupaca"
+
+
+class Omiljeni_proizvodi(models.Model):
+    user = models.OneToOneField(User, related_name='omiljeni')
+    artikli = models.ManyToManyField(Artikal, related_name='omiljeni', blank=True)
+
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        verbose_name_plural = "Omiljeni proizvodi"
