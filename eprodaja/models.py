@@ -81,12 +81,16 @@ class Korpa(models.Model):
         verbose_name_plural = "Korpe kupaca"
 
 
-class Omiljeni_proizvodi(models.Model):
-    user = models.OneToOneField(User, related_name='omiljeni')
-    artikli = models.ManyToManyField(Artikal, related_name='omiljeni', blank=True)
+class Poruke(models.Model):
+    user = models.ForeignKey(User, related_name='poruke')
+    tema = models.CharField(max_length=250, null=True, blank=True)
+    poruka = models.TextField(null=True, blank=True)
+    datum = models.DateField(auto_now_add=True)
+    procitana = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
 
     class Meta:
-        verbose_name_plural = "Omiljeni proizvodi"
+        verbose_name_plural = "Poruke"
+

@@ -28,19 +28,19 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-SESSION_COOKIE_AGE = 60 * 60 * 2 # seconds * minutes * hours
+SESSION_COOKIE_AGE = 60 * 60 * 7 # seconds * minutes * hours
 SESSION_SAVE_EVERY_REQUEST = True
 
 # Application definition
 
 INSTALLED_APPS = [
+    'eprodaja', # Mora app pre admina zbog template-a za reset lozinke
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'eprodaja'
+    'django.contrib.staticfiles'
 ]
 
 MIDDLEWARE = [
@@ -103,13 +103,21 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = (
+    'nsmobilplus.backends.EmailBackend',
+)
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'papulic@gmail.com'
+EMAIL_HOST_PASSWORD = 'stefan15'
+EMAIL_PORT = 587
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'sr-YU'  # en-us
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Belgrade'
 
 USE_I18N = True
 
