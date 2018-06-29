@@ -861,6 +861,7 @@ h2.title {
   right: 0;
 }
 
+
 .productinfo h2{
 	color: #FE980F;
 	font-family: 'Roboto', sans-serif;
@@ -880,10 +881,12 @@ h2.title {
   font-size: 14px;
   font-weight: 400;
   color: #696763;
+  word-wrap: break-word;
 }
 
 .productinfo img{
-  width: 100%;
+  width: 180px;
+  height: 250px;
 }
 
 .productinfo{
@@ -964,6 +967,10 @@ h2.title {
 
 .add-to-cart i{
 	margin-right:5px;
+}
+
+.input_span{
+	margin-right:10px;
 }
 
 .add-to-cart:hover {
@@ -1625,6 +1632,11 @@ h2.title {
   font-size: 24px;
 }
 
+#cart_items .cart_info .cart_total_price_total {
+  color: #6f7072;
+  font-size: 24px;
+}
+
 .cart_product {
   display: block;
   margin: 15px -70px 10px 25px;
@@ -1711,6 +1723,11 @@ h2.title {
   color: #696763;
   margin-top: 10px;
   padding: 7px 20px;
+}
+
+.total_area p {
+  margin-top: 10px;
+  padding: 10px 75px;
 }
 
 

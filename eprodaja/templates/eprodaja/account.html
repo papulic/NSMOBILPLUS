@@ -1,0 +1,74 @@
+{% extends 'eprodaja/base.html' %}
+{% block title %}Nalog{% endblock %}
+{% block content %}
+{% load staticfiles %}
+
+	<section id="cart_items">
+		<div class="container">
+			<div class="step-one">
+				<h2 class="heading">{{ user.username }}</h2>
+			</div>
+			<div class="checkout-options">
+				<h3>{{ user.first_name }} {{ user.last_name }}</h3>
+				<p>{{ user.email }}</p>
+
+			</div><!--/checkout-options-->
+
+			<div class="register-req">
+				<p>Informacije o porudžbinama</p>
+			</div><!--/register-req-->
+
+			<div class="shopper-informations">
+				<div class="row">
+					<div class="col-sm-3">
+						<div class="shopper-info">
+							<p>Adresa za dostavu</p>
+							<form role="form" action="{% url 'eprodaja:nalog' user.id %}" method="post" enctype="multipart/form-data" class="contact-form row" name="contact-form">
+							{% csrf_token %}
+								<input type="text" name="adresa" placeholder="Ulica i broj" value="{{ user.detalji_korisnika.adresa }}">
+								<input type="text" name="postanski_broj" placeholder="Poštanski broj" value="{{ user.detalji_korisnika.postanski_broj }}" pattern="[0-9]{5}">
+								<input type="text" name="grad" placeholder="Grad" value="{{ user.detalji_korisnika.grad }}">
+								<input type="text" name="kontakt_telefon" placeholder="Kontakt telefon" value="{{ user.detalji_korisnika.kontakt_telefon }}">
+								<input type="submit" name="submit" class="btn btn-primary" value="Izmeni podatke">
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% if korpe %}
+			<div class="review-payment">
+				<h2>Moje porudžbine</h2>
+			</div>
+
+			<div class="table-responsive cart_info">
+				<table class="table table-condensed">
+					<thead>
+						<tr class="cart_menu">
+							<td class="description">Identifikacija</td>
+							<td class="price">Datum</td>
+							<td class="total">Ukupno</td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody>
+					{% for korpa in korpe %}
+						<tr>
+							<td class="cart_description">
+								<h4><a href="{% url 'eprodaja:korpa_detalji' korpa.id %}">#{{ korpa.id }}</a></h4>
+							</td>
+							<td class="cart_price">
+								<p>{{ korpa.datum }}</p>
+							</td>
+							<td class="cart_total">
+								<p class="cart_total_price">{{ korpa.ukupno }}</p>
+							</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			{% endif %}
+		</div>
+	</section> <!--/#cart_items-->
+
+{% endblock %}

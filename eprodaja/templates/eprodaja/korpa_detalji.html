@@ -1,0 +1,48 @@
+{% extends 'eprodaja/base.html' %}
+{% block title %}Nalog{% endblock %}
+{% block content %}
+{% load staticfiles %}
+    <section id="cart_items">
+		<div class="container">
+			<div class="review-payment">
+				<h2>Korpa #{{ korpa.id }} | {{ korpa.datum }}</h2>
+			</div>
+
+			<div class="table-responsive cart_info">
+				<table class="table table-condensed">
+					<thead>
+						<tr class="cart_menu">
+							<td class="description">Artikal</td>
+							<td>Količina</td>
+							<td class="total">Cena</td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody>
+					{% for unos in unosi %}
+						<tr>
+							<td class="cart_description">
+								<h4>{{ unos.artikal.opis }}</a></h4>
+							</td>
+							<td>
+								<center><h4 class="kolicina">{{ unos.quantity }}</h4></center>
+							</td>
+							<td class="cart_total">
+								<p class="cart_total_price">{{ unos.ukupno }}</p>
+							</td>
+                        </tr>
+					{% endfor %}
+                        <tr>
+                            <td><h4>Ukupno:</h4></td>
+                            <td></td>
+                            <td class="cart_total">
+                                <p class="cart_total_price">{{ korpa.ukupno }}</p>
+                            </td>
+                        </tr>
+					</tbody>
+				</table>
+			</div>
+        </div>
+    </section>
+
+{% endblock %}

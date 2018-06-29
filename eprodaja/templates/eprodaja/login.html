@@ -40,6 +40,10 @@
 						<form role="form" action="{% url 'eprodaja:login_user'%}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             {{ registerForm.as_p }}
+                            <hr>
+                            <h5><center>Sledeća polja nisu obavezna za registraciju,<br>možete ih ispuniti prilikom kupovine</center></h5>
+                            {% csrf_token %}
+                            {{ detaljiForm.as_p }}
 							<button type="submit" class="btn btn-default" name="registrovanje_korisnika">Napravi nalog</button>
 						</form>
 					</div><!--/sign up form-->

@@ -25,11 +25,15 @@ SECRET_KEY = 'ck2vo@9c8x$jr%tm58llz_$mgkus_ut3b9m=q98@v!u35-2rwg'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_COOKIE_AGE = 60 * 60 * 7 # seconds * minutes * hours
 SESSION_SAVE_EVERY_REQUEST = True
+
+# settings for filtering
+FILTERS_EMPTY_CHOICE_LABEL = "SVE"
+FILTERS_DISABLE_HELP_TEXT = True
 
 # Application definition
 

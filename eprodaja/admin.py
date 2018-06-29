@@ -2,26 +2,30 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
-from .models import Artikal, Korpa, Detalji_korisnika, Poruke
+from .models import Artikal, Korpa, Detalji_korisnika, Poruke, Marka, Kategorija, Model
 
 
 
 
 class ArtikalModelAdmin(admin.ModelAdmin):
     list_display = ["id", "kategorija", "marka", "model", "cena", "na_stanju", "na_akciji"]
-    list_filter = ["kategorija", "marka", "cena"]
+    list_filter = ["kategorija__kategorija", "marka__marka", "na_stanju", "na_akciji"]
     list_editable = ["na_stanju", "na_akciji", "cena"]
 
-# class KategorijaModelAdmin(admin.ModelAdmin):
-#     list_display = ["kategorija"]
-#     list_filter = ["kategorija"]
-#
-# class MarkaModelAdmin(admin.ModelAdmin):
-#     list_display = ["marka"]
-#     list_filter = ["marka"]
+class KategorijaModelAdmin(admin.ModelAdmin):
+    list_display = ["kategorija"]
+    list_filter = ["kategorija"]
+
+class MarkaModelAdmin(admin.ModelAdmin):
+    list_display = ["marka"]
+    list_filter = ["marka"]
+
+class ModelModelAdmin(admin.ModelAdmin):
+    list_display = ["marka", "model"]
+    list_filter = ["marka__marka"]
 
 class KorpaModelAdmin(admin.ModelAdmin):
-    list_display = ["user", "user_id", "ukupno", "potvrdjena", "otpremljena", "artikli_u_korpi"]
+    list_display = ["user", "user_id", "ukupno", "potvrdjena", "otpremljena"]
     list_filter = ["user__username", "potvrdjena", "otpremljena"]
 
 
@@ -39,5 +43,6 @@ admin.site.register(Detalji_korisnika, Detalji_korisnikaModelAdmin)
 admin.site.register(Artikal, ArtikalModelAdmin)
 admin.site.register(Korpa, KorpaModelAdmin)
 admin.site.register(Poruke, PorukeModelAdmin)
-# admin.site.register(Kategorija, KategorijaModelAdmin)
-# admin.site.register(Marka, MarkaModelAdmin)
+admin.site.register(Kategorija, KategorijaModelAdmin)
+admin.site.register(Marka, MarkaModelAdmin)
+admin.site.register(Model, ModelModelAdmin)

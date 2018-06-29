@@ -6,79 +6,91 @@ from django.contrib.auth.models import Permission, User
 from django.core.validators import RegexValidator
 
 
-
-
-
-# class Kategorija(models.Model):
-#     kategorija = models.CharField(max_length=30)
-#
-#     def __str__(self):
-#         return self.kategorija
-#
-#     class Meta:
-#         verbose_name_plural = "Kategorije"
-
 class Detalji_korisnika(models.Model):
     korisnik = models.OneToOneField(User, on_delete=models.CASCADE)
     adresa = models.CharField(max_length=50)
-    postanski_broj = models.IntegerField(validators=[RegexValidator(regex='^.{5}$', message='Poštanski broj mora imati 5 cifara', code='Poštanski broj mora imati 5 cifara')])
+    postanski_broj = models.CharField(max_length=5, validators=[RegexValidator(regex='^.{5}$', message='Poštanski broj mora imati 5 cifara', code='Poštanski broj mora imati 5 cifara')])
     grad = models.CharField(max_length=25)
     kontakt_telefon = models.CharField(max_length=15)
 
-    def __str__(self):
+    def __unicode__(self):
         return self.korisnik.username
 
     class Meta:
         verbose_name_plural = "Detalji korisnika"
 
 
-Marke = (
-    ('samsung', 'SAMSUNG'),
-    ('huawei', 'HUAWEI'),
-    ('sony', 'SONY'),
-    ('motorola', 'MOTOROLA'),
-    ('asus', 'ASUS'),
-)
+class Marka(models.Model):
+    marka = models.CharField(max_length=30)
 
-Kategorije = (
-    ('maska', 'MASKA'),
-    ('folija', 'FOLIJA'),
-    ('staklo 2d', 'STAKLO 2D')
-)
+    def __unicode__(self):
+        return self.marka
+
+    class Meta:
+        verbose_name_plural = "Marke"
+
+
+class Kategorija(models.Model):
+    kategorija = models.CharField(max_length=30)
+
+    def __unicode__(self):
+        return self.kategorija
+
+    class Meta:
+        verbose_name_plural = "Kategorije"
+
+
+class Model(models.Model):
+    marka = models.ForeignKey(Marka, on_delete=models.CASCADE)
+    model = models.CharField(max_length=30)
+
+    def __unicode__(self):
+        return self.marka.marka + " - " + self.model
+
+    class Meta:
+        verbose_name_plural = "Modeli"
+
 
 class Artikal(models.Model):
-    model = models.CharField(max_length=100)
-    marka = models.CharField(max_length=10, choices=Marke)
-    kategorija = models.CharField(max_length=10, choices=Kategorije)
+    model = models.ForeignKey(Model, on_delete=models.CASCADE)
+    opis = models.CharField(max_length=100)
+    marka = models.ForeignKey(Marka, on_delete=models.CASCADE)
+    kategorija = models.ForeignKey(Kategorija, on_delete=models.CASCADE)
     slika = models.ImageField(null=True, blank=True)
-    cena = models.DecimalField(decimal_places=2, max_digits=10)
+    cena = models.FloatField()
     na_stanju = models.BooleanField(default=True)
     na_akciji = models.BooleanField(default=False)
 
-    def __str__(self):
-        return self.kategorija + " - " + self.marka + " - " + self.model
+    def __unicode__(self):
+        return self.kategorija.kategorija + " - " + self.marka.marka + " - " + self.model.model
 
     class Meta:
         verbose_name_plural = "Artikli"
+        ordering = ['-kategorija', ]
 
 
 class Korpa(models.Model):
     user = models.ForeignKey(User, related_name='korpe')
     datum = models.DateField(auto_now_add=True)
-    artikli = models.ManyToManyField(Artikal, related_name='korpe', blank=True)
-    ukupno = models.DecimalField(decimal_places=2, max_digits=10, default=0.00)
+    ukupno = models.FloatField(default=0.0)
+    ukupno_proizvoda_u_korpi = models.PositiveIntegerField(default=0)
     potvrdjena = models.BooleanField(default=False)
     otpremljena = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __unicode__(self):
         return self.user.username + " - id: " + str(self.user.id)
-
-    def artikli_u_korpi(self):
-        return ", ".join([str(artikal.id) for artikal in self.artikli.all()])
 
 
     class Meta:
         verbose_name_plural = "Korpe kupaca"
+        ordering = ['-datum', ]
+
+
+class Entry(models.Model):
+    artikal = models.ForeignKey(Artikal, on_delete=models.CASCADE)
+    korpa = models.ForeignKey(Korpa, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    ukupno = models.FloatField(default=0.0)
 
 
 class Poruke(models.Model):
@@ -88,9 +100,10 @@ class Poruke(models.Model):
     datum = models.DateField(auto_now_add=True)
     procitana = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __unicode__(self):
         return self.user.username
 
     class Meta:
         verbose_name_plural = "Poruke"
+        ordering = ['-datum', ]
 
