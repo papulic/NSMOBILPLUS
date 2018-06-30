@@ -43,6 +43,13 @@
 							<td class="cart_total">
 								<p class="cart_total_price">{{ unos.ukupno }}</p>
 							</td>
+							<td>
+								<form action="{% url 'eprodaja:korpa' user.id %}" method="post">
+								{% csrf_token %}
+									<input type="hidden" name="brisi_unos" value="{{ unos.id }}">
+									<input class="btn btn-default add-to-cart" type="submit" name="obrisi" value="Ukloni" autocomplete="off" size="2">
+								</form>
+							</td>
                         </tr>
 					{% endfor %}
                         <tr>

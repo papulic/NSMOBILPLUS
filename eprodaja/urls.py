@@ -15,4 +15,5 @@ urlpatterns = [
     url(r'^korpa/(?P<user_id>[0-9]+)/$', views.korpa, name='korpa'),
     url(r'^detalji_korpe/(?P<korpa_id>[0-9]+)/$', views.korpa_detalji, name='korpa_detalji'),
     url(r'^dodaj_artikal/$', views.add_artikal, name='add_artikal'),
+    url(r'^filter/$', views.filter, name='filter'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

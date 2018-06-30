@@ -85,6 +85,17 @@
 			<div class="row">
 				<div class="col-sm-3">
 					<div class="left-sidebar">
+						<div class="brands_products"><!--brands_products-->
+							<h2>Filter</h2>
+							<div class="brands-name">
+								<ul class="nav nav-pills nav-stacked">
+									<form id="artikli_form" method="get">
+										{{ artikli_filter.form.as_p }}
+										<button id="artikli_filter" type="submit">Search</input>
+								  	</form>
+								</ul>
+							</div>
+						</div><!--/brands_products-->
                         <h2>MARKE</h2>
                         <div class="panel-group category-products" id="accordian"><!--category-productsr-->
 
@@ -116,8 +127,8 @@
 				<div class="col-sm-9 padding-right">
 					<div class="recommended_items"><!--recommended_items-->
 						<h2 class="title text-center">ARTIKLI</h2>
-							<div id="filter_artikli" class="category-tab"><!--category-tab-->
-                                <!--Ovo brise jquery filter-->
+							<div class="category-tab"><!--category-tab-->
+
                                 {% for artikal in random_artikli %}
 								<div class="col-sm-3">
 									<div class="product-image-wrapper">
@@ -129,12 +140,13 @@
 												<h2>{{ artikal.cena }} din</h2>
 												<p>{{ artikal.opis }}</p>
                                                 <button id="{{ artikal.id }}" class="btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button>
+
 											</div>
+
 										</div>
 									</div>
 								</div>
 								{% endfor %}
-
 							</div><!--/category-tab-->
 						</div>
 					{% if artikli_na_akciji %}
@@ -194,12 +206,13 @@
 			</div>
 		</div>
 	</section>
+<div class="container" id="probni">
+</div>
 {% endblock %}
 {% block jquery %}
  <script>
 $(document).ready(function () {
-    //$(":button").click(function() {
-    jQuery(document.body).on('click', ':button', function() {
+    $(":button").click(function() {
         //console.log(this.id);
         if(this.id != "artikli_filter"){
             var artikal_id = this.id;
@@ -238,21 +251,9 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (data) {
                 if (data) {
-                    $("#filter_artikli").html("");
                     for (i = 0; i < data.length; i++){
-                        var line = '<div class="col-sm-3"> \
-									<div class="product-image-wrapper"> \
-										<div class="single-products"> \
-											<div class="productinfo text-center"> \
-											    <img src="/media/' + data[i].slika + '" alt="" /> \
-												<h2>' + data[i].cena + 'din</h2> \
-												<p>' + data[i].opis + '</p> \
-                                                <button id="' + data[i].id + '" class="btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button> \
-											</div> \
-										</div> \
-									</div> \
-								</div>';
-                        $("#filter_artikli").append(line);
+                        var line = '<h4>' + data[i].model + '</h4>';
+                        $("#probni").append(line);
                     }
                 }
             }

@@ -85,40 +85,34 @@
 			<div class="row">
 				<div class="col-sm-3">
 					<div class="left-sidebar">
-                        <h2>MARKE</h2>
-                        <div class="panel-group category-products" id="accordian"><!--category-productsr-->
+						<div class="brands_products"><!--brands_products-->
+							<h2>Filter</h2>
+							<div class="brands-name">
+								<ul class="nav nav-pills nav-stacked">
+									<form id="artikli_form" method="get">
+										{{ artikli_filter.form.as_p }}
+										<button type="submit">Search</input>
+								  	</form>
 
-                            {% for marka in sve_marke %}
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title">
-										<a data-id="marka{{ marka.id }}" data-toggle="collapse" data-parent="#accordian" href="#{{ marka }}">
-											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
-											{{ marka }}
-										</a>
-									</h4>
-								</div>
-								<div id="{{ marka }}" class="panel-collapse collapse">
-									<div class="panel-body">
-										<ul>
-                                            {% for model in marka.model_set.all %}
-											<li><a href="javascript:void(0)" data-id="model{{ model.id }}">{{ model.model }} </a></li>
-											{% endfor %}
-										</ul>
-									</div>
-								</div>
+
+								</ul>
 							</div>
-                            {% endfor %}
-						</div><!--/category-products-->
+						</div><!--/brands_products-->
+						
+					
+						
+						<div class="shipping text-center"><!--shipping-->
+							<img src="{%  static 'eprodaja/images/home/shipping.jpg' %}" alt="" />
+						</div><!--/shipping-->
+					
 					</div>
 				</div>
 				
 				<div class="col-sm-9 padding-right">
 					<div class="recommended_items"><!--recommended_items-->
-						<h2 class="title text-center">ARTIKLI</h2>
-							<div id="filter_artikli" class="category-tab"><!--category-tab-->
-                                <!--Ovo brise jquery filter-->
-                                {% for artikal in random_artikli %}
+						<h2 class="title text-center">{{ kategorija }} - {{ marka }} - {{ model }}</h2>
+							<div class="category-tab"><!--category-tab-->
+								{% for artikal in artikli_filter.qs %}
 								<div class="col-sm-3">
 									<div class="product-image-wrapper">
 										<div class="single-products">
@@ -128,13 +122,17 @@
 												{% endif %}
 												<h2>{{ artikal.cena }} din</h2>
 												<p>{{ artikal.opis }}</p>
-                                                <button id="{{ artikal.id }}" class="btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button>
+												<form id="artikal{{ forloop.counter0 }}" method="post">
+												{% csrf_token %}
+													<input type="hidden" name="artikal" value="{{ artikal.id }}">
+													<i class="fa fa-shopping-cart input_span"></i><input class="btn btn-default add-to-cart" type="submit" value="U korpu">
+												</form>
 											</div>
+
 										</div>
 									</div>
 								</div>
 								{% endfor %}
-
 							</div><!--/category-tab-->
 						</div>
 					{% if artikli_na_akciji %}
@@ -158,8 +156,12 @@
 													<img src="{{ artikal.slika.url }}" alt="" />
 													{% endif %}
 													<h2>{{ artikal.cena }}</h2>
-													<p>{{ artikal.opis }}</p>
-													<button id="{{ artikal.id }}" class="btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button>
+													<p>{{ artikal }}</p>
+													<form id="artikal_akcija{{ forloop.counter0 }}" method="post">
+													{% csrf_token %}
+														<input type="hidden" name="artikal" value="{{ artikal.id }}">
+														<i class="fa fa-shopping-cart input_span"></i><input class="btn btn-default add-to-cart" type="submit" value="U korpu">
+													</form>
 												</div>
 											</div>
 										</div>
@@ -194,70 +196,29 @@
 			</div>
 		</div>
 	</section>
+
 {% endblock %}
 {% block jquery %}
  <script>
 $(document).ready(function () {
-    //$(":button").click(function() {
-    jQuery(document.body).on('click', ':button', function() {
-        //console.log(this.id);
-        if(this.id != "artikli_filter"){
-            var artikal_id = this.id;
+    $("input[type=submit]").click(function() {
+        if(this.form.id != "artikli_filter"){
+  	        var artikal_id = $(this.form).find('input[name="artikal"]').val();
             $.ajax({
-                context: this,
                 url: '/dodaj_artikal/',
                 data: {
                        'artikal_id': artikal_id
                 },
                 dataType: 'json',
                 success: function (data) {
-                    if (data.error) {
-                        window.location = '/logovanje/';
-                    } else{
-                        $('html, body').animate({
-                            'scrollTop' : $("#korpa").position().top
-                        });
-
-                        var itemImg = $(this).parent().find('img').eq(0);
-                        flyToElement($(itemImg), $('#korpa'));
+                    if (data) {
                         $("#korpa").html(data.proizvoda_u_korpi);
-                        $(this).hide();
                     }
                 }
             });
         }
+        else{alert('aaa');}
     });
-    $('a').on("click",function(){
-        var model_ili_marka =  $(this).data("id");
-        $.ajax({
-            context: this,
-            url: '/filter/',
-            data: {
-                   'model_ili_marka': model_ili_marka
-            },
-            dataType: 'json',
-            success: function (data) {
-                if (data) {
-                    $("#filter_artikli").html("");
-                    for (i = 0; i < data.length; i++){
-                        var line = '<div class="col-sm-3"> \
-									<div class="product-image-wrapper"> \
-										<div class="single-products"> \
-											<div class="productinfo text-center"> \
-											    <img src="/media/' + data[i].slika + '" alt="" /> \
-												<h2>' + data[i].cena + 'din</h2> \
-												<p>' + data[i].opis + '</p> \
-                                                <button id="' + data[i].id + '" class="btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button> \
-											</div> \
-										</div> \
-									</div> \
-								</div>';
-                        $("#filter_artikli").append(line);
-                    }
-                }
-            }
-        });
-    })
 });
 </script>
 {% endblock %}

@@ -41,7 +41,7 @@
                             <ul class="nav navbar-nav">
                                 {% if user.is_authenticated %}
                                 <li><a href="{% url 'eprodaja:nalog' user.id %}"><i class="fa fa-user"></i> Moj nalog</a></li>
-                                <li><a href="{% url 'eprodaja:korpa' user.id %}"><i class="fa fa-shopping-cart"></i> Korpa<span class="badge progress-bar-danger">{{ proizvoda_u_korpi }}</span></a></li>
+                                <li><a href="{% url 'eprodaja:korpa' user.id %}"><i class="fa fa-shopping-cart"></i> Korpa<span id="korpa" class="badge progress-bar-danger">{{ proizvoda_u_korpi }}</span></a></li>
                                 <li><a href="{% url 'eprodaja:logout_user' %}"><i class="fa fa-unlock"></i> izloguj se</a></li>
 					            {% else %}
                                 <li><a href="{% url 'eprodaja:login_user' %}"><i class="fa fa-lock"></i> Uloguj se/Napravi nalog</a></li>
@@ -124,6 +124,7 @@
     <script src="{% static 'eprodaja/js/price-range.js' %}"></script>
     <script src="{% static 'eprodaja/js/jquery.prettyPhoto.js' %}"></script>
     <script src="{% static 'eprodaja/js/main.js' %}"></script>
+    <script src="{% static 'eprodaja/js/fly.js' %}"></script>
 {% block jquery %}
 
 {% endblock %}

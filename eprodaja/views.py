@@ -11,55 +11,21 @@ from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 from .forms import UserLoginForm, UserRegisterForm, DetaljiForm
 from . models import Poruke, Detalji_korisnika, Korpa, Artikal, Kategorija, Marka, Model, Entry
-from .filters import ArtikalFilter
 from django.http import JsonResponse
-import json
+from django.contrib import messages
+import random
 
 
 def index(request):
     user = None
     artikli = Artikal.objects.filter(na_stanju=True).order_by('kategorija').order_by('marka')
     artikli_na_akciji = Artikal.objects.filter(na_akciji=True)
-    artikli_filter = ArtikalFilter(request.GET, queryset=artikli)
-    if request.method == 'GET':
-        if 'marka' in request.GET:
-            izabrana_marka_id = request.GET['marka']
-            if izabrana_marka_id != "":
-                marka = Marka.objects.get(pk=izabrana_marka_id)
-            else:
-                marka = 'SVE MARKE'
-        else:
-            marka = 'SVE MARKE'
-        if 'kategorija' in request.GET:
-            izabrana_kategorija_id = request.GET['kategorija']
-            if izabrana_kategorija_id != "":
-                kategorija = Kategorija.objects.get(pk=izabrana_kategorija_id)
-            else:
-                kategorija = 'SVI PROIZVODI'
-        else:
-            kategorija = 'SVI PROIZVODI'
-        if 'model' in request.GET:
-            izabrani_model_id = request.GET['model']
-            if izabrani_model_id != "":
-                model = Model.objects.get(pk=izabrani_model_id)
-                model = model.model
-            else:
-                model = 'SVI MODELI'
-        else:
-            model = 'SVI MODELI'
-    else:
-        marka = 'SVE MARKE'
-        kategorija = 'SVI PROIZVODI'
-        model = 'SVI MODELI'
+    sve_marke = Marka.objects.all()
+    random_artikli = [artikli[i] for i in random.sample(range(1, len(artikli)), 6)]
 
     if request.user.is_authenticated():
         user = request.user
 
-    else:
-        if request.method == 'POST':
-            if 'artikal' in request.POST:
-                messages.success(request, 'Morate biti ulogovani!')
-                return HttpResponseRedirect('/logovanje')
     proizvoda_u_korpi = 0
     try:
         korpa = user.korpe.get(potvrdjena=False)
@@ -68,41 +34,49 @@ def index(request):
         pass
     return render(request, 'eprodaja/index.html', {
             'user': user,
-            'artikli': artikli,
-            'artikli_filter': artikli_filter,
-            'marka': marka,
-            'kategorija': kategorija,
-            'model': model,
             'artikli_na_akciji': artikli_na_akciji,
-            'proizvoda_u_korpi': proizvoda_u_korpi
+            'proizvoda_u_korpi': proizvoda_u_korpi,
+            'sve_marke': sve_marke,
+            'random_artikli': random_artikli
         })
 
 
 def add_artikal(request):
     user = request.user
-
-    artikal_id = request.GET.get('artikal_id', None)
-    artikal = Artikal.objects.get(pk=artikal_id)
-    try:
-        korpa = user.korpe.get(potvrdjena=False)
-    except Korpa.MultipleObjectsReturned:
-        korpa = user.korpe.filter(potvrdjena=False)[0]  # ne sme da se desi
-    except Korpa.DoesNotExist:
-        korpa = Korpa()
-        korpa.user = user
+    if user.username != "":
+        artikal_id = request.GET.get('artikal_id', None)
+        artikal = Artikal.objects.get(pk=artikal_id)
+        try:
+            korpa = user.korpe.get(potvrdjena=False)
+        except Korpa.MultipleObjectsReturned:
+            korpa = user.korpe.filter(potvrdjena=False)[0]  # ne sme da se desi
+        except Korpa.DoesNotExist:
+            korpa = Korpa()
+            korpa.user = user
+            korpa.save()
+        unos = Entry(korpa=korpa, artikal=artikal)
+        unos.ukupno = artikal.cena
+        unos.save()
+        korpa.ukupno += artikal.cena
+        korpa.ukupno_proizvoda_u_korpi += 1
         korpa.save()
-    unos = Entry(korpa=korpa, artikal=artikal)
-    unos.ukupno = artikal.cena
-    unos.save()
-    korpa.ukupno += artikal.cena
-    korpa.ukupno_proizvoda_u_korpi += 1
-    korpa.save()
-    data = {'proizvoda_u_korpi': korpa.ukupno_proizvoda_u_korpi}
+        data = {'proizvoda_u_korpi': korpa.ukupno_proizvoda_u_korpi}
+    else:
+        messages.add_message(request, messages.INFO, 'Morate biti ulogovani!')
+        data = {'error': True}
     return JsonResponse(data)
     # return HttpResponse(
     #     json.dumps(response_data),
     #     content_type="application/json")
 
+def filter(request):
+    model_ili_marka = request.GET.get('model_ili_marka', None)
+    if model_ili_marka.startswith('marka'):
+        marka_id = model_ili_marka.split('marka')[1]
+        marka = Marka.objects.get(pk=marka_id)
+        artikli = marka.artikal_set.all()
+        data = list(artikli.values())
+    return JsonResponse(data, safe=False)
 
 mail_registracija = """
 Poštovani {username},
@@ -267,6 +241,11 @@ def korpa(request, user_id):
                     unos.ukupno -= unos.artikal.cena
                     unos.save()
                     izmena_na_unosu = True
+        if 'brisi_unos' in request.POST:
+            unos_id = request.POST['brisi_unos']
+            unos = Entry.objects.get(pk=unos_id)
+            unos.delete()
+            izmena_na_unosu = True
         if izmena_na_unosu:
             korpa = Korpa.objects.get(user=user, potvrdjena=False)
             unosi = korpa.entry_set.all()

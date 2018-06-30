@@ -53,7 +53,7 @@ class Model(models.Model):
 
 class Artikal(models.Model):
     model = models.ForeignKey(Model, on_delete=models.CASCADE)
-    opis = models.CharField(max_length=100)
+    opis = models.CharField(max_length=100, default="Ovaj artikal nema opis!")
     marka = models.ForeignKey(Marka, on_delete=models.CASCADE)
     kategorija = models.ForeignKey(Kategorija, on_delete=models.CASCADE)
     slika = models.ImageField(null=True, blank=True)
@@ -91,6 +91,13 @@ class Entry(models.Model):
     korpa = models.ForeignKey(Korpa, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     ukupno = models.FloatField(default=0.0)
+
+    def __unicode__(self):
+        return self.artikal.opis + str(self.quantity)
+
+
+    class Meta:
+        verbose_name_plural = "Unosi u korpe"
 
 
 class Poruke(models.Model):

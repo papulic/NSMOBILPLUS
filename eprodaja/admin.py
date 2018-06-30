@@ -25,7 +25,7 @@ class ModelModelAdmin(admin.ModelAdmin):
     list_filter = ["marka__marka"]
 
 class KorpaModelAdmin(admin.ModelAdmin):
-    list_display = ["user", "user_id", "ukupno", "potvrdjena", "otpremljena"]
+    list_display = ["user", "user_id", "ukupno", "potvrdjena", "otpremljena", "datum"]
     list_filter = ["user__username", "potvrdjena", "otpremljena"]
 
 
