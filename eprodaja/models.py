@@ -103,6 +103,17 @@ class Korpa(models.Model):
     def __unicode__(self):
         return self.user.username + " - id: " + str(self.user.id)
 
+    def ime(self):
+        return self.user.first_name + " " + self.user.last_name
+
+    def mail(self):
+        return self.user.email
+
+    def tel(self):
+        return self.user.detalji_korisnika.kontakt_telefon
+
+    def adresa(self):
+        return self.user.detalji_korisnika.adresa + "\n" + self.user.detalji_korisnika.postanski_broj + "\n" + self.user.detalji_korisnika.grad
 
     class Meta:
         verbose_name_plural = "Korpe kupaca"
@@ -117,7 +128,6 @@ class Entry(models.Model):
 
     def __unicode__(self):
         return self.artikal.opis + str(self.quantity)
-
 
     class Meta:
         verbose_name_plural = "Unosi u korpe"

@@ -15,13 +15,13 @@ class KorisnikKorpaInline(admin.TabularInline):
     model = Korpa
     extra = 0
 
+
 class EntryKorpaInline(admin.TabularInline):
     model = Entry
     extra = 0
 
 class DetaljiKorisnikInline(admin.StackedInline):
     model = Detalji_korisnika
-
 
 class UserAdmin(AuthUserAdmin):
  inlines = [DetaljiKorisnikInline, KorisnikKorpaInline]
@@ -51,6 +51,7 @@ class KorpaModelAdmin(admin.ModelAdmin):
     list_filter = ["user__username", "potvrdjena", "otpremljena"]
     list_editable = ["otpremljena"]
     inlines = [EntryKorpaInline, ]
+    readonly_fields = ['ime', 'mail', 'adresa', 'tel']
 
 
 class Detalji_korisnikaModelAdmin(admin.ModelAdmin):
