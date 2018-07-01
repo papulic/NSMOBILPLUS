@@ -19,3 +19,29 @@ Mozda sve jquery ajax!!
 mozda ipak sa strane kategorija pa podkategorije kao ms mobil.
 
 mozda artikal detalji page i da artikal ima polje broj pregleda pa uzeti prvih nekoliko i na pocetnu stranicu.
+
+cuvati pretrage!!
+
+admin sajt korpa koji su proizvodi unutra.. i podaci korisnika
+
+artikal polje filter opis
+
+
+artikli
+
+punjaci: podkategorija kucni i auto i bezicni: podkategorija type c, micro i lighting-iphone
+data-usb kablovi: podkategorija type c, micro i lighting-iphone
+usb-adapteri: podkategorija kucni i auto
+baterije: podkategorija modeli (samsung)
+bluetooth zvucnici
+slusalice
+memorijske kartice
+flash memorije
+futrole: podkategorija univerzalne, silikonske, pvc, preklopne, bumperi: podkategorija: samsung, huawei...
+folije za ekran: podkategorija brendovi
+stakla-glass za ekran: podkategorija zakrivljena, obicna: podkategorija brendovi
+
+
+if tip or brend or nista
+
+srediti ajax gresku na index page kad se klikne drugi href koji nema kategorija ili podkategorija

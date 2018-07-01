@@ -85,25 +85,28 @@
 			<div class="row">
 				<div class="col-sm-3">
 					<div class="left-sidebar">
-                        <h2>MARKE</h2>
+                        <h2>KATEGORIJE</h2>
                         <div class="panel-group category-products" id="accordian"><!--category-productsr-->
 
-                            {% for marka in sve_marke %}
+                            {% for kategorija in sve_kategorije %}
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h4 class="panel-title">
-										<a data-id="marka{{ marka.id }}" data-toggle="collapse" data-parent="#accordian" href="#{{ marka }}">
-											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
-											{{ marka }}
+										<a data-id="kategorija{{ kategorija.id }}" {% if kategorija.podkategorije.all %}data-toggle="collapse" data-parent="#accordian" href="#{{ kategorija }}">
+											<span class="badge pull-right"><i class="fa fa-plus"></i></span>{% else %}href="javascript:void(0)">{% endif %}
+											{{ kategorija }}
 										</a>
 									</h4>
 								</div>
-								<div id="{{ marka }}" class="panel-collapse collapse">
+
+								<div id="{{ kategorija }}" class="panel-collapse collapse">
 									<div class="panel-body">
 										<ul>
-                                            {% for model in marka.model_set.all %}
-											<li><a href="javascript:void(0)" data-id="model{{ model.id }}">{{ model.model }} </a></li>
+											{% if kategorija.podkategorije.all %}
+                                            {% for podkategorija in kategorija.podkategorije.all %}
+											<li><a href="javascript:void(0)" data-id="podkategorija{{ podkategorija.id }}">{{ podkategorija.podkategorija }} </a></li>
 											{% endfor %}
+											{% endif %}
 										</ul>
 									</div>
 								</div>
@@ -228,12 +231,12 @@ $(document).ready(function () {
         }
     });
     $('a').on("click",function(){
-        var model_ili_marka =  $(this).data("id");
+        var kategorija_ili_podkategorija =  $(this).data("id");
         $.ajax({
             context: this,
             url: '/filter/',
             data: {
-                   'model_ili_marka': model_ili_marka
+                   'kategorija_ili_podkategorija': kategorija_ili_podkategorija
             },
             dataType: 'json',
             success: function (data) {

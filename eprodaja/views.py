@@ -10,18 +10,18 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 from .forms import UserLoginForm, UserRegisterForm, DetaljiForm
-from . models import Poruke, Detalji_korisnika, Korpa, Artikal, Kategorija, Marka, Model, Entry
+from . models import Poruke, Detalji_korisnika, Korpa, Artikal, Kategorija, Podkategorija, Brend, Entry, Tip, Slika
 from django.http import JsonResponse
 from django.contrib import messages
-import random
+# from django.core.serializers import serialize
 
 
 def index(request):
     user = None
-    artikli = Artikal.objects.filter(na_stanju=True).order_by('kategorija').order_by('marka')
+    artikli = Artikal.objects.filter(na_stanju=True).order_by('kategorija')
     artikli_na_akciji = Artikal.objects.filter(na_akciji=True)
-    sve_marke = Marka.objects.all()
-    random_artikli = [artikli[i] for i in random.sample(range(1, len(artikli)), 6)]
+    sve_kategorije = Kategorija.objects.all()
+    # random_artikli = [artikli[i] for i in random.sample(range(1, len(artikli)), 6)]
 
     if request.user.is_authenticated():
         user = request.user
@@ -36,8 +36,8 @@ def index(request):
             'user': user,
             'artikli_na_akciji': artikli_na_akciji,
             'proizvoda_u_korpi': proizvoda_u_korpi,
-            'sve_marke': sve_marke,
-            'random_artikli': random_artikli
+            'sve_kategorije': sve_kategorije,
+            # 'random_artikli': random_artikli
         })
 
 
@@ -69,12 +69,14 @@ def add_artikal(request):
     #     json.dumps(response_data),
     #     content_type="application/json")
 
+
+# ovde je sad kategorija ili podkategorija ( namestiti u templateu )
 def filter(request):
-    model_ili_marka = request.GET.get('model_ili_marka', None)
-    if model_ili_marka.startswith('marka'):
-        marka_id = model_ili_marka.split('marka')[1]
-        marka = Marka.objects.get(pk=marka_id)
-        artikli = marka.artikal_set.all()
+    kategorija_ili_podkategorija = request.GET.get('kategorija_ili_podkategorija', None)
+    if kategorija_ili_podkategorija and kategorija_ili_podkategorija.startswith('kategorija'):
+        kategorija_id = kategorija_ili_podkategorija.split('kategorija')[1]
+        kategorija = Kategorija.objects.get(pk=kategorija_id)
+        artikli = kategorija.artikli.all()
         data = list(artikli.values())
     return JsonResponse(data, safe=False)
 

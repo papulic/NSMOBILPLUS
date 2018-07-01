@@ -20,14 +20,23 @@ class Detalji_korisnika(models.Model):
         verbose_name_plural = "Detalji korisnika"
 
 
-class Marka(models.Model):
-    marka = models.CharField(max_length=30)
+class Brend(models.Model):
+    brend = models.CharField(max_length=30)
 
     def __unicode__(self):
-        return self.marka
+        return self.brend
 
     class Meta:
-        verbose_name_plural = "Marke"
+        verbose_name_plural = "Brendovi"
+
+class Tip(models.Model):
+    tip = models.CharField(max_length=30)
+
+    def __unicode__(self):
+        return self.tip
+
+    class Meta:
+        verbose_name_plural = "Tipovi"
 
 
 class Kategorija(models.Model):
@@ -40,33 +49,47 @@ class Kategorija(models.Model):
         verbose_name_plural = "Kategorije"
 
 
-class Model(models.Model):
-    marka = models.ForeignKey(Marka, on_delete=models.CASCADE)
-    model = models.CharField(max_length=30)
+class Podkategorija(models.Model):
+    kategorija = models.ForeignKey(Kategorija, on_delete=models.CASCADE, related_name="podkategorije")
+    podkategorija = models.CharField(max_length=30)
 
     def __unicode__(self):
-        return self.marka.marka + " - " + self.model
+        return self.kategorija.kategorija + " - " + self.podkategorija
 
     class Meta:
-        verbose_name_plural = "Modeli"
+        verbose_name_plural = "Podkategorije"
 
 
 class Artikal(models.Model):
-    model = models.ForeignKey(Model, on_delete=models.CASCADE)
+    kategorija = models.ForeignKey(Kategorija, on_delete=models.CASCADE, related_name='artikli')
+    podkategorija = models.ForeignKey(Podkategorija, on_delete=models.CASCADE, null=True, blank=True, related_name='artikli')
+    tip = models.ForeignKey(Tip, on_delete=models.CASCADE, null=True, blank=True, related_name='artikli')
+    brend = models.ForeignKey(Brend, on_delete=models.CASCADE, null=True, blank=True, related_name='artikli')
     opis = models.CharField(max_length=100, default="Ovaj artikal nema opis!")
-    marka = models.ForeignKey(Marka, on_delete=models.CASCADE)
-    kategorija = models.ForeignKey(Kategorija, on_delete=models.CASCADE)
-    slika = models.ImageField(null=True, blank=True)
+    opis_za_filter = models.CharField(max_length=100)
     cena = models.FloatField()
+    slika = models.ImageField()
     na_stanju = models.BooleanField(default=True)
     na_akciji = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return self.kategorija.kategorija + " - " + self.marka.marka + " - " + self.model.model
+        if self.podkategorija and self.tip:
+            return str(self.id) + "_" + self.kategorija.kategorija + "_" + self.podkategorija.podkategorija + "_" + self.tip.tip + "_" + self.opis
+        elif self.podkategorija and self.brend:
+            return str(self.id) + "_" + self.kategorija.kategorija + "_" + self.podkategorija.podkategorija + "_" + self.brend.brend + "_" + self.opis
+        elif self.podkategorija:
+            return str(self.id) + "_" + self.kategorija.kategorija + "_" + self.podkategorija.podkategorija + "_" + self.opis
+        else:
+            return str(self.id) + "_" + self.kategorija.kategorija + "_" + self.opis
 
     class Meta:
         verbose_name_plural = "Artikli"
         ordering = ['-kategorija', ]
+
+
+class Slika(models.Model):
+    artikal = models.ForeignKey(Artikal, related_name='dodatne_slike')
+    slika = models.ImageField()
 
 
 class Korpa(models.Model):
