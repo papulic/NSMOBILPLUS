@@ -45,3 +45,5 @@ stakla-glass za ekran: podkategorija zakrivljena, obicna: podkategorija brendovi
 if tip or brend or nista
 
 srediti ajax gresku na index page kad se klikne drugi href koji nema kategorija ili podkategorija
+
+umesto slova ns mobilplus  ->  logo
