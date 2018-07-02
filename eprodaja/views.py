@@ -21,6 +21,7 @@ def index(request):
     artikli = Artikal.objects.filter(na_stanju=True).order_by('kategorija')
     artikli_na_akciji = Artikal.objects.filter(na_akciji=True)
     sve_kategorije = Kategorija.objects.all()
+    tipovi = Tip.objects.all()
     # random_artikli = [artikli[i] for i in random.sample(range(1, len(artikli)), 6)]
 
     if request.user.is_authenticated():
@@ -37,6 +38,7 @@ def index(request):
             'artikli_na_akciji': artikli_na_akciji,
             'proizvoda_u_korpi': proizvoda_u_korpi,
             'sve_kategorije': sve_kategorije,
+            'tipovi': tipovi,
             # 'random_artikli': random_artikli
         })
 
@@ -70,15 +72,32 @@ def add_artikal(request):
     #     content_type="application/json")
 
 
-# ovde je sad kategorija ili podkategorija ( namestiti u templateu )
 def filter(request):
+    artikli = None
     kategorija_ili_podkategorija = request.GET.get('kategorija_ili_podkategorija', None)
-    if kategorija_ili_podkategorija and kategorija_ili_podkategorija.startswith('kategorija'):
+    kategorija = request.GET.get('kategorija', None)
+    podkategorija = request.GET.get('podkategorija', None)
+    if kategorija_ili_podkategorija.startswith('kategorija'):
         kategorija_id = kategorija_ili_podkategorija.split('kategorija')[1]
-        kategorija = Kategorija.objects.get(pk=kategorija_id)
-        artikli = kategorija.artikli.all()
+        artikli = Artikal.objects.filter(kategorija_id=kategorija_id)
+    elif kategorija_ili_podkategorija.startswith('podkategorija'):
+        podkategorija_id = kategorija_ili_podkategorija.split('podkategorija')[1]
+        artikli = Artikal.objects.filter(podkategorija_id=podkategorija_id)
+    elif kategorija_ili_podkategorija.startswith('tip'):
+        tip_id = kategorija_ili_podkategorija.split('tip')[1]
+        artikli = Artikal.objects.filter(tip_id=tip_id)
+        if kategorija:
+            kategorija_id = kategorija.split('kategorija')[1]
+            artikli = artikli.filter(kategorija_id=kategorija_id)
+        if podkategorija:
+            podkategorija_id = podkategorija.split('podkategorija')[1]
+            artikli = artikli.filter(podkategorija_id=podkategorija_id)
+    if artikli:
         data = list(artikli.values())
+    else:
+        data = {}
     return JsonResponse(data, safe=False)
+
 
 mail_registracija = """
 Poštovani {username},
@@ -281,3 +300,11 @@ def korpa_detalji(request, korpa_id):
     unosi = korpa.entry_set.all()
     return render(request, 'eprodaja/korpa_detalji.html', {'korpa': korpa, 'unosi': unosi})
 
+
+def artikal_detalji(request, artikal_id):
+    artikal = Artikal.objects.get(pk=artikal_id)
+    ostale_slike = Slika.objects.filter(artikal=artikal)
+    return render(request, 'eprodaja/product-details.html', {'artikal': artikal, 'ostale_slike': ostale_slike})
+
+def error_404(request):
+    return render(request, 'eprodaja/404.html')

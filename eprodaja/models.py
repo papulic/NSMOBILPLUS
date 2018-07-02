@@ -54,7 +54,7 @@ class Podkategorija(models.Model):
     podkategorija = models.CharField(max_length=30)
 
     def __unicode__(self):
-        return self.kategorija.kategorija + " - " + self.podkategorija
+        return self.podkategorija
 
     class Meta:
         verbose_name_plural = "Podkategorije"
@@ -68,7 +68,7 @@ class Artikal(models.Model):
     opis = models.CharField(max_length=100, default="Ovaj artikal nema opis!")
     opis_za_filter = models.CharField(max_length=100)
     cena = models.FloatField()
-    slika = models.ImageField()
+    slika = models.ImageField(default='default.jpg')
     na_stanju = models.BooleanField(default=True)
     na_akciji = models.BooleanField(default=False)
 

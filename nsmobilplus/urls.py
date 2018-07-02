@@ -16,6 +16,8 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from django.conf.urls import handler404
+from eprodaja import views as eprodaja_views
 
 
 urlpatterns = [
@@ -28,3 +30,5 @@ urlpatterns = [
     url(r'^reset/done/$', auth_views.password_reset_complete, name='password_reset_complete')
 ]
 admin.site.site_header = "NS MOBIL PLUS administracija"
+
+handler404 = eprodaja_views.error_404

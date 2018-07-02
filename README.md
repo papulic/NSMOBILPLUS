@@ -1,8 +1,10 @@
 # NSMOBILPLUS
 
-proizvodi slike 180x250
+proizvodi slike 180x250 za index
 
 default slika 180 x 250
+
+velika za detail 360x500
 
 malo vece slike zbog detail page
 
@@ -44,6 +46,8 @@ stakla-glass za ekran: podkategorija zakrivljena, obicna: podkategorija brendovi
 
 if tip or brend or nista
 
-srediti ajax gresku na index page kad se klikne drugi href koji nema kategorija ili podkategorija
+srediti ajax gresku na index page kad se klikne drugi href koji nema kategorija ili podkategorija  -  ok
 
 umesto slova ns mobilplus  ->  logo
+
+sa stranice detalji ubacivanje u korpu kroz istu funkciju

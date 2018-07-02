@@ -32,8 +32,8 @@ SESSION_COOKIE_AGE = 60 * 60 * 7 # seconds * minutes * hours
 SESSION_SAVE_EVERY_REQUEST = True
 
 # settings for filtering
-FILTERS_EMPTY_CHOICE_LABEL = "SVE"
-FILTERS_DISABLE_HELP_TEXT = True
+# FILTERS_EMPTY_CHOICE_LABEL = "SVE"
+# FILTERS_DISABLE_HELP_TEXT = True
 
 # Application definition
 

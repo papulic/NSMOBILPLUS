@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^detalji_korpe/(?P<korpa_id>[0-9]+)/$', views.korpa_detalji, name='korpa_detalji'),
     url(r'^dodaj_artikal/$', views.add_artikal, name='add_artikal'),
     url(r'^filter/$', views.filter, name='filter'),
+    url(r'^artikal/(?P<artikal_id>[0-9]+)/$', views.artikal_detalji, name='artikal_detalji'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

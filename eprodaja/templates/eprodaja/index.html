@@ -29,7 +29,7 @@
 						<div class="carousel-inner">
 							<div class="item active">
 								<div class="col-sm-6">
-									<h1><span>NS</span>-MOBILPLUS</h1>
+									<h1><img class="stop jq" width="308" height="70" src="{%  static 'eprodaja/images/home/NSmobilPlusLogo.jpg' %}" alt="" /></h1>
 									<h2>Prodaja opreme za mobilne telefone</h2>
 									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
 									<button type="button" class="btn btn-default get">Pogledajte ponudu</button>
@@ -41,7 +41,7 @@
 							</div>
 							<div class="item">
 								<div class="col-sm-6">
-									<h1><span>NS</span>-MOBILPLUS</h1>
+									<h1><img class="stop jq" width="308" height="70" src="{%  static 'eprodaja/images/home/NSmobilPlusLogo.jpg' %}" alt="" /></h1>
 									<h2>Servis mobilnih telefona</h2>
 									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
 									<button type="button" class="btn btn-default get">Pogledajte ponudu</button>
@@ -54,7 +54,7 @@
 							
 							<div class="item">
 								<div class="col-sm-6">
-									<h1><span>NS</span>-MOBILPLUS</h1>
+									<h1><img class="stop jq" width="308" height="70" src="{%  static 'eprodaja/images/home/NSmobilPlusLogo.jpg' %}" alt="" /></h1>
 									<h2>Prodaja mobilnih telefona</h2>
 									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
 									<button type="button" class="btn btn-default get">Pogledajte ponudu</button>
@@ -67,10 +67,10 @@
 							
 						</div>
 						
-						<a href="#slider-carousel" class="left control-carousel hidden-xs" data-slide="prev">
+						<a href="#slider-carousel" class="stop jq left control-carousel hidden-xs" data-slide="prev">
 							<i class="fa fa-angle-left"></i>
 						</a>
-						<a href="#slider-carousel" class="right control-carousel hidden-xs" data-slide="next">
+						<a href="#slider-carousel" class="stop jq right control-carousel hidden-xs" data-slide="next">
 							<i class="fa fa-angle-right"></i>
 						</a>
 					</div>
@@ -92,8 +92,12 @@
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h4 class="panel-title">
-										<a data-id="kategorija{{ kategorija.id }}" {% if kategorija.podkategorije.all %}data-toggle="collapse" data-parent="#accordian" href="#{{ kategorija }}">
-											<span class="badge pull-right"><i class="fa fa-plus"></i></span>{% else %}href="javascript:void(0)">{% endif %}
+										{% if kategorija.podkategorije.all %}
+										<a class="kategorija{{ kategorija.id }}" data-id="kategorija{{ kategorija.id }}" data-toggle="collapse" data-parent="#accordian" href="#{{ kategorija }}">
+											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
+										{% else %}
+										<a class="kategorija{{ kategorija.id }}" data-id="kategorija{{ kategorija.id }}" href="javascript:void(0)">
+										{% endif %}
 											{{ kategorija }}
 										</a>
 									</h4>
@@ -104,9 +108,28 @@
 										<ul>
 											{% if kategorija.podkategorije.all %}
                                             {% for podkategorija in kategorija.podkategorije.all %}
-											<li><a href="javascript:void(0)" data-id="podkategorija{{ podkategorija.id }}">{{ podkategorija.podkategorija }} </a></li>
+											<li>
+												{% if kategorija.kategorija == "PUNJAČI"  %}
+												<a class="podkategorija{{ podkategorija.id }}" data-id="podkategorija{{ podkategorija.id }}" data-toggle="collapse" href="#{{ podkategorija.podkategorija }}">
+													<span class="badge pull-right"><i class="fa fa-plus"></i></span>
+												{% else %}
+												<a class="podkategorija{{ podkategorija.id }}" data-id="podkategorija{{ podkategorija.id }}" href="javascript:void(0)">
+												{% endif %}
+													<b>{{ podkategorija.podkategorija }}</b>
+												</a>
+											</li>
+											{% if kategorija.kategorija == "PUNJAČI" %}
+											<div id="{{ podkategorija.podkategorija }}" class="collapse">
+												<ul>
+												{% for tip in tipovi %}
+													<li><a data-id="tip{{ tip.id }}" href="javascript:void(0)">{{ tip.tip }}</a></li>
+												{% endfor %}
+												</ul>
+											</div>
+											{% endif %}
 											{% endfor %}
 											{% endif %}
+
 										</ul>
 									</div>
 								</div>
@@ -126,9 +149,11 @@
 									<div class="product-image-wrapper">
 										<div class="single-products">
 											<div class="productinfo text-center">
+												<a class="stop jq" href="artikal/{{ artikal.id }}"></a>
 												{% if artikal.slika %}
 												<img src="{{ artikal.slika.url }}" alt="" />
 												{% endif %}
+												</a>
 												<h2>{{ artikal.cena }} din</h2>
 												<p>{{ artikal.opis }}</p>
                                                 <button id="{{ artikal.id }}" class="btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button>
@@ -157,9 +182,11 @@
 										<div class="product-image-wrapper">
 											<div class="single-products">
 												<div class="productinfo text-center">
+													<a class="stop jq" href="artikal/{{ artikal.id }}">
 													{% if artikal.slika %}
 													<img src="{{ artikal.slika.url }}" alt="" />
 													{% endif %}
+													</a>
 													<h2>{{ artikal.cena }}</h2>
 													<p>{{ artikal.opis }}</p>
 													<button id="{{ artikal.id }}" class="btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button>
@@ -184,10 +211,10 @@
 								{% endfor %}
 
 							</div>
-							 <a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
+							 <a class="stop jq left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
 								<i class="fa fa-angle-left"></i>
 							  </a>
-							  <a class="right recommended-item-control" href="#recommended-item-carousel" data-slide="next">
+							  <a class="stop jq right recommended-item-control" href="#recommended-item-carousel" data-slide="next">
 								<i class="fa fa-angle-right"></i>
 							  </a>			
 						</div>
@@ -230,35 +257,48 @@ $(document).ready(function () {
             });
         }
     });
-    $('a').on("click",function(){
-        var kategorija_ili_podkategorija =  $(this).data("id");
-        $.ajax({
-            context: this,
-            url: '/filter/',
-            data: {
-                   'kategorija_ili_podkategorija': kategorija_ili_podkategorija
-            },
-            dataType: 'json',
-            success: function (data) {
-                if (data) {
-                    $("#filter_artikli").html("");
-                    for (i = 0; i < data.length; i++){
-                        var line = '<div class="col-sm-3"> \
+    // class="stop jq" dodato svugde na index i base na elemente "a", da se ne dobija greska ako nije pretraga!!!
+    $('a:not([class^="stop jq"])').on("click",function(){
+		var kategorija_ili_podkategorija =  $(this).data("id");
+		//var parent = $(this).closest('div').attr('id');
+		//var kategorija = $('html').find('a[class^="kategorija"]').data("id");
+		var kategorija = $(this).parents().addBack().prevAll().find('a[class^="kategorija"]').addBack('a[class^="kategorija"]').last().data("id");
+		var podkategorija = $(this).parents().addBack().prevAll().find('a[class^="podkategorija"]').addBack('a[class^="podkategorija"]').last().data("id");
+		//console.log(kategorija);
+		//console.log(podkategorija);
+		$.ajax({
+			context: this,
+			url: '/filter/',
+			data: {
+				   'kategorija_ili_podkategorija': kategorija_ili_podkategorija,
+				   'kategorija': kategorija,
+				   'podkategorija': podkategorija
+			},
+			dataType: 'json',
+			success: function (data) {
+				//if (data.length > 0) {
+				if (data) {
+					//console.log(data);
+					$("#filter_artikli").html("");
+					for (i = 0; i < data.length; i++){
+						var line = '<div class="col-sm-3"> \
 									<div class="product-image-wrapper"> \
 										<div class="single-products"> \
 											<div class="productinfo text-center"> \
-											    <img src="/media/' + data[i].slika + '" alt="" /> \
+												<a class="stop jq" href="artikal/'+data[i].id+'"> \
+												<img src="/media/' + data[i].slika + '" alt="" /> \
+												</a> \
 												<h2>' + data[i].cena + 'din</h2> \
 												<p>' + data[i].opis + '</p> \
-                                                <button id="' + data[i].id + '" class="btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button> \
+												<button id="' + data[i].id + '" class="btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button> \
 											</div> \
 										</div> \
 									</div> \
 								</div>';
-                        $("#filter_artikli").append(line);
-                    }
-                }
-            }
+						$("#filter_artikli").append(line);
+					}
+				}
+			}
         });
     })
 });

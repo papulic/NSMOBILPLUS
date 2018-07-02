@@ -1174,14 +1174,12 @@ h2.title {
 
 
 
-.view-product {
-  position: relative;
-}
+
 
 .view-product img {
   border: 1px solid #F7F7F0;
-  height: 380px;
-  width: 100%;
+  height: 500px;
+  width: 360px;
 }
 
 .view-product h3 {
@@ -2537,4 +2535,25 @@ h2.title {
   color: #FE980F;
 }
 
+
+
+.image-grid {
+    display: -ms-flex;
+    display: flex;
+    -moz-flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-bottom: 20em;
+    margin-left: 7em;
+}
+.image-grid .image {
+    margin: 10px;
+}
+.image-grid .image img {
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    -ms-transition: all .2s ease-in-out;
+}
 
