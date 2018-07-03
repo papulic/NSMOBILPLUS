@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
-from .models import Artikal, Korpa, Detalji_korisnika, Poruke, Podkategorija, Kategorija, Brend, Tip, Slika, Entry
+from .models import Artikal, Korpa, Detalji_korisnika, Poruke, Podkategorija, Kategorija, Brend, Tip, Slika, Entry, Pretraga
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
 from django.contrib.auth.models import User
 
@@ -20,6 +20,10 @@ class EntryKorpaInline(admin.TabularInline):
     model = Entry
     extra = 0
 
+class PodkategorijaInline(admin.TabularInline):
+    model = Podkategorija
+    extra = 0
+
 class DetaljiKorisnikInline(admin.StackedInline):
     model = Detalji_korisnika
 
@@ -35,6 +39,7 @@ class ArtikalModelAdmin(admin.ModelAdmin):
 
 class KategorijaModelAdmin(admin.ModelAdmin):
     list_display = ["kategorija"]
+    inlines = [PodkategorijaInline]
 
 class PodkategorijaModelAdmin(admin.ModelAdmin):
     list_display = ["podkategorija", "kategorija"]
@@ -65,6 +70,11 @@ class PorukeModelAdmin(admin.ModelAdmin):
     list_editable = ["procitana"]
 
 
+class PretragaModelAdmin(admin.ModelAdmin):
+    list_display = ["pretraga", "id"]
+
+
+
 admin.site.register(Detalji_korisnika, Detalji_korisnikaModelAdmin)
 admin.site.register(Artikal, ArtikalModelAdmin)
 admin.site.register(Korpa, KorpaModelAdmin)
@@ -73,6 +83,7 @@ admin.site.register(Kategorija, KategorijaModelAdmin)
 admin.site.register(Podkategorija, PodkategorijaModelAdmin)
 admin.site.register(Brend, BrendModelAdmin)
 admin.site.register(Tip, TipModelAdmin)
+admin.site.register(Pretraga, PretragaModelAdmin)
 # unregister old user admin
 admin.site.unregister(User)
 # register new user admin

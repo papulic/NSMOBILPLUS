@@ -70,6 +70,8 @@
 		</div>
 	</section> <!--/#cart_items-->
 
+
+
 	<section id="do_action">
 		<div class="container">
 
@@ -98,7 +100,7 @@
 						{% if korpa.ukupno < 2500 %}
 						<p>Da bi ostvarili besplatnu poštarinu korpa mora imati vrednost veću od 2500din</p>
 						{% endif %}
-						<a class="btn btn-default update" href="">Kupi</a>
+						{% if unosi %}<button id="kupi" class="btn btn-default update" href="">Kupi</button>{% endif %}
 					</div>
 				</div>
 				<div class="col-sm-6">
@@ -110,12 +112,67 @@
 							<li>Grad <span>{{ user.detalji_korisnika.grad }}</span></li>
 							<li>Kontakt telefon <span>{{ user.detalji_korisnika.kontakt_telefon }}</span></li>
 						</ul>
-							<p>Ako su podaci neispravni, molim vas idite u "Moj nalog" i unesite ispravne podatke</p>
+							<p>Ako su podaci neispravni, molim vas idite u Vaš nalog i unesite ispravne podatke</p>
 							<a class="btn btn-default update" href="{% url 'eprodaja:nalog' user.id %}">Moj nalog</a>
 					</div>
 				</div>
 			</div>
 		</div>
 	</section><!--/#do_action-->
+	{% if unosi %}
+	<section>
+		<!-- The Modal -->
+		<div class="modal" tabindex="-1" role="dialog">
+		  <div class="modal-dialog" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h5 class="modal-title">{{ user.username }}</h5>
+			  </div>
+			  <div class="modal-body">
+				<h5>Sadrzaj korpe:</h5>
+				  <table class="table table-condensed">
+					  <tbody>
+					  	{% for unos in unosi %}
+						<tr>
+							<td>
+								{{ unos.artikal.opis }}
+							</td>
+							<td>
+								{{ unos.quantity }}
+							</td>
+							<td>
+								{{ unos.ukupno }}
+							</td>
+						</tr>
+					  {% endfor %}
+					  <td><b>Ukupno:</b></td>
+					  <td></td>
+					  <td><b>{{ korpa.ukupno }}</b></td>
+					  </tbody>
+				  </table>
+					<h4>Podaci za dostavu:</h4>
+				  		<ul>
+							<li>Ulica i broj <span>{{ user.detalji_korisnika.adresa }}</span></li>
+							<li>Poštanski broj <span>{{ user.detalji_korisnika.postanski_broj }}</span></li>
+							<li>Grad <span>{{ user.detalji_korisnika.grad }}</span></li>
+							<li>Kontakt telefon <span>{{ user.detalji_korisnika.kontakt_telefon }}</span></li>
+						</ul>
+							<p>Ako su podaci neispravni, molim vas idite u Vaš nalog i unesite ispravne podatke</p>
+			  </div>
+			  <div class="modal-footer">
+				  <a href="{% url 'eprodaja:nalog' user.id %}"><button class="btn btn-secondary">Moj nalog</button></a>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Odustani</button>
+				  <a href="{% url 'eprodaja:potvrdi_korpu' korpa.id %}"><button class="btn btn-secondary btn-warning">Kupi</button></a>
+			  </div>
+			</div>
+		  </div>
+		</div>
+	</section>
+	{% endif %}
+{% endblock %}
+{% block jquery %}
+	$("#kupi").click(function() {
+		$('.modal').modal('show');
+	});
 
 {% endblock %}

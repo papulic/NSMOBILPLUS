@@ -54,7 +54,7 @@ class Podkategorija(models.Model):
     podkategorija = models.CharField(max_length=30)
 
     def __unicode__(self):
-        return self.podkategorija
+        return self.kategorija.kategorija + " - " + self.podkategorija
 
     class Meta:
         verbose_name_plural = "Podkategorije"
@@ -71,6 +71,7 @@ class Artikal(models.Model):
     slika = models.ImageField(default='default.jpg')
     na_stanju = models.BooleanField(default=True)
     na_akciji = models.BooleanField(default=False)
+    broj_pregleda = models.IntegerField(default=0)
 
     def __unicode__(self):
         if self.podkategorija and self.tip:
@@ -147,3 +148,12 @@ class Poruke(models.Model):
         verbose_name_plural = "Poruke"
         ordering = ['-datum', ]
 
+
+class Pretraga(models.Model):
+    pretraga = models.CharField(max_length=50)
+
+    def __unicode__(self):
+        return self.pretraga
+
+    class Meta:
+        verbose_name_plural = "Pretrage"

@@ -10,10 +10,10 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 from .forms import UserLoginForm, UserRegisterForm, DetaljiForm
-from . models import Poruke, Detalji_korisnika, Korpa, Artikal, Kategorija, Podkategorija, Brend, Entry, Tip, Slika
+from . models import Poruke, Detalji_korisnika, Korpa, Artikal, Kategorija, Podkategorija, Brend, Entry, Tip, Slika, Pretraga
 from django.http import JsonResponse
 from django.contrib import messages
-# from django.core.serializers import serialize
+import random
 
 
 def index(request):
@@ -22,8 +22,12 @@ def index(request):
     artikli_na_akciji = Artikal.objects.filter(na_akciji=True)
     sve_kategorije = Kategorija.objects.all()
     tipovi = Tip.objects.all()
-    # random_artikli = [artikli[i] for i in random.sample(range(1, len(artikli)), 6)]
-
+    brendovi = Brend.objects.all()
+    # try:
+    #     random_artikli = [artikli[i] for i in random.sample(range(1, len(artikli)), 15)]
+    # except ValueError:
+    #     random_artikli = [artikli[i] for i in random.sample(range(1, len(artikli)), len(artikli) - 1)]
+    random_artikli = Artikal.objects.filter(na_stanju=True).order_by('-broj_pregleda')[:15]
     if request.user.is_authenticated():
         user = request.user
 
@@ -39,7 +43,8 @@ def index(request):
             'proizvoda_u_korpi': proizvoda_u_korpi,
             'sve_kategorije': sve_kategorije,
             'tipovi': tipovi,
-            # 'random_artikli': random_artikli
+            'brendovi': brendovi,
+            'random_artikli': random_artikli
         })
 
 
@@ -47,6 +52,7 @@ def add_artikal(request):
     user = request.user
     if user.username != "":
         artikal_id = request.GET.get('artikal_id', None)
+        komada = request.GET.get('komada', None)
         artikal = Artikal.objects.get(pk=artikal_id)
         try:
             korpa = user.korpe.get(potvrdjena=False)
@@ -57,10 +63,18 @@ def add_artikal(request):
             korpa.user = user
             korpa.save()
         unos = Entry(korpa=korpa, artikal=artikal)
-        unos.ukupno = artikal.cena
+        if komada:
+            unos.ukupno = artikal.cena * int(komada)
+            unos.quantity = int(komada)
+        else:
+            unos.ukupno = artikal.cena
         unos.save()
-        korpa.ukupno += artikal.cena
-        korpa.ukupno_proizvoda_u_korpi += 1
+        if komada:
+            korpa.ukupno += artikal.cena * int(komada)
+            korpa.ukupno_proizvoda_u_korpi += int(komada)
+        else:
+            korpa.ukupno += artikal.cena
+            korpa.ukupno_proizvoda_u_korpi += 1
         korpa.save()
         data = {'proizvoda_u_korpi': korpa.ukupno_proizvoda_u_korpi}
     else:
@@ -92,6 +106,40 @@ def filter(request):
         if podkategorija:
             podkategorija_id = podkategorija.split('podkategorija')[1]
             artikli = artikli.filter(podkategorija_id=podkategorija_id)
+    elif kategorija_ili_podkategorija.startswith('brend'):
+        brend_id = kategorija_ili_podkategorija.split('brend')[1]
+        artikli = Artikal.objects.filter(brend_id=brend_id)
+        if kategorija:
+            kategorija_id = kategorija.split('kategorija')[1]
+            artikli = artikli.filter(kategorija_id=kategorija_id)
+        if podkategorija:
+            podkategorija_id = podkategorija.split('podkategorija')[1]
+            artikli = artikli.filter(podkategorija_id=podkategorija_id)
+    if artikli:
+        data = list(artikli.values())
+    else:
+        data = {}
+    return JsonResponse(data, safe=False)
+
+
+def pretraga(request):
+    pretraga = request.GET.get('pretraga', None)
+    splited = pretraga.split()
+    if len(pretraga) > 5:
+        if Pretraga.objects.filter(pretraga=pretraga).exists():
+            pass
+        else:
+            if Pretraga.objects.all().count() > 500:
+                pretrage = Pretraga.objects.all()[200:].values_list("id", flat=True)
+                Pretraga.objects.exclude(pk__in=list(pretrage)).delete()
+            nova_pretraga = Pretraga()
+            nova_pretraga.pretraga = pretraga
+            nova_pretraga.save()
+    if len(splited) > 0:
+        artikli = Artikal.objects.filter(opis_za_filter__icontains=splited[0])
+        for pos, i in enumerate(splited):
+            if pos > 0:
+                artikli = artikli.filter(opis_za_filter__icontains=i)
     if artikli:
         data = list(artikli.values())
     else:
@@ -206,8 +254,14 @@ def logout_user(request):
 
 def kontakt(request):
     user = None
+    proizvoda_u_korpi = 0
     if request.user.is_authenticated():
         user = request.user
+        try:
+            korpa = user.korpe.get(potvrdjena=False)
+            proizvoda_u_korpi = korpa.ukupno_proizvoda_u_korpi
+        except:
+            pass
     if request.method == "POST":
         username = request.POST['name']
         email = request.POST['email']
@@ -220,13 +274,19 @@ def kontakt(request):
         nova_poruka.save()
         messages.success(request, '{username}, hvala vam što ste nas kontaktirali!'.format(username=username))
         return HttpResponseRedirect(reverse('eprodaja:kontakt'))
-    return render(request, 'eprodaja/contact-us.html', {'user': user})
+    return render(request, 'eprodaja/contact-us.html', {'user': user, 'proizvoda_u_korpi': proizvoda_u_korpi})
 
 
 def nalog(request, user_id):
     user = User.objects.get(pk=user_id)
     detalji_korisnika = Detalji_korisnika.objects.get(korisnik=user)
     korpe = Korpa.objects.filter(user=user, potvrdjena=True).order_by('datum')
+    proizvoda_u_korpi = 0
+    try:
+        korpa = user.korpe.get(potvrdjena=False)
+        proizvoda_u_korpi = korpa.ukupno_proizvoda_u_korpi
+    except:
+        pass
     if request.method == "POST":
         adresa = request.POST['adresa']
         postanski_broj = request.POST['postanski_broj']
@@ -239,7 +299,7 @@ def nalog(request, user_id):
         detalji_korisnika.save()
         messages.success(request, 'Podaci su ažurirani!')
         return HttpResponseRedirect('/nalog/{user_id}'.format(user_id=user_id))
-    return render(request, 'eprodaja/account.html', {'user': user, 'korpe': korpe})
+    return render(request, 'eprodaja/account.html', {'user': user, 'korpe': korpe, 'proizvoda_u_korpi': proizvoda_u_korpi})
 
 
 def korpa(request, user_id):
@@ -301,10 +361,26 @@ def korpa_detalji(request, korpa_id):
     return render(request, 'eprodaja/korpa_detalji.html', {'korpa': korpa, 'unosi': unosi})
 
 
+def potvrdi_korpu(request, korpa_id):
+    korpa = Korpa.objects.get(pk=korpa_id)
+    korpa.potvrdjena = True
+    korpa.save()
+    messages.success(request, 'Hvala na kupovini! Detalje o vašim porudžbinama možete videti u sekciji Moj nalog.')
+    return HttpResponseRedirect("/")
+
 def artikal_detalji(request, artikal_id):
     artikal = Artikal.objects.get(pk=artikal_id)
+    artikal.broj_pregleda += 1
+    artikal.save()
     ostale_slike = Slika.objects.filter(artikal=artikal)
-    return render(request, 'eprodaja/product-details.html', {'artikal': artikal, 'ostale_slike': ostale_slike})
+    proizvoda_u_korpi = 0
+    user = request.user
+    try:
+        korpa = user.korpe.get(potvrdjena=False)
+        proizvoda_u_korpi = korpa.ukupno_proizvoda_u_korpi
+    except:
+        pass
+    return render(request, 'eprodaja/product-details.html', {'artikal': artikal, 'ostale_slike': ostale_slike, 'proizvoda_u_korpi': proizvoda_u_korpi})
 
 def error_404(request):
     return render(request, 'eprodaja/404.html')
