@@ -97,11 +97,7 @@ def filter(request):
                 brend_id = i.split("brend")[1]
                 artikli = artikli.filter(brend_id=brend_id)
     if artikli:
-        artikli_ids = artikli.values_list("id", flat=True)
-        slike = Slika.objects.filter(pk__in=list(artikli_ids))
-        data = [[],[]]
-        data[0] = list(artikli.values())
-        data[1] = list(slike.values())
+        data = list(artikli.values())
     else:
         data = {}
     return JsonResponse(data, safe=False)
@@ -127,13 +123,18 @@ def pretraga(request):
                 if pos > 0:
                     artikli = artikli.filter(opis_za_filter__icontains=i)
     if artikli:
-        artikli_ids = artikli.values_list("id", flat=True)
-        slike = Slika.objects.filter(pk__in=list(artikli_ids))
-        data = [[], []]
-        data[0] = list(artikli.values())
-        data[1] = list(slike.values())
+        data = list(artikli.values())
     else:
         data = {}
+    return JsonResponse(data, safe=False)
+
+def create_modal(request):
+    artikal_id = request.GET.get('artikal_id', None)
+    artikal = Artikal.objects.filter(pk=artikal_id)
+    slike = Slika.objects.filter(artikal_id=artikal_id)
+    data = [[], []]
+    data[0] = list(artikal.values())
+    data[1] = list(slike.values())
     return JsonResponse(data, safe=False)
 
 
