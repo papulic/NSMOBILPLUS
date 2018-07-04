@@ -29,7 +29,7 @@
 						<div class="carousel-inner">
 							<div class="item active">
 								<div class="col-sm-6">
-									<h1><img class="stop jq" width="308" height="70" src="{%  static 'eprodaja/images/home/NSmobilPlusLogo.jpg' %}" alt="" /></h1>
+									<h1><img width="308" height="70" src="{%  static 'eprodaja/images/home/NSmobilPlusLogo.jpg' %}" alt="" /></h1>
 									<h2>Prodaja opreme za mobilne telefone</h2>
 									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
 									<button type="button" class="btn btn-default get">Pogledajte ponudu</button>
@@ -41,7 +41,7 @@
 							</div>
 							<div class="item">
 								<div class="col-sm-6">
-									<h1><img class="stop jq" width="308" height="70" src="{%  static 'eprodaja/images/home/NSmobilPlusLogo.jpg' %}" alt="" /></h1>
+									<h1><img width="308" height="70" src="{%  static 'eprodaja/images/home/NSmobilPlusLogo.jpg' %}" alt="" /></h1>
 									<h2>Servis mobilnih telefona</h2>
 									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
 									<button type="button" class="btn btn-default get">Pogledajte ponudu</button>
@@ -54,7 +54,7 @@
 							
 							<div class="item">
 								<div class="col-sm-6">
-									<h1><img class="stop jq" width="308" height="70" src="{%  static 'eprodaja/images/home/NSmobilPlusLogo.jpg' %}" alt="" /></h1>
+									<h1><img width="308" height="70" src="{%  static 'eprodaja/images/home/NSmobilPlusLogo.jpg' %}" alt="" /></h1>
 									<h2>Prodaja mobilnih telefona</h2>
 									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
 									<button type="button" class="btn btn-default get">Pogledajte ponudu</button>
@@ -67,10 +67,10 @@
 							
 						</div>
 						
-						<a href="#slider-carousel" class="stop jq left control-carousel hidden-xs" data-slide="prev">
+						<a href="#slider-carousel" class="left control-carousel hidden-xs" data-slide="prev">
 							<i class="fa fa-angle-left"></i>
 						</a>
-						<a href="#slider-carousel" class="stop jq right control-carousel hidden-xs" data-slide="next">
+						<a href="#slider-carousel" class="right control-carousel hidden-xs" data-slide="next">
 							<i class="fa fa-angle-right"></i>
 						</a>
 					</div>
@@ -104,56 +104,73 @@
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h4 class="panel-title">
-										{% if kategorija.podkategorije.all %}
-										<a class="kategorija{{ kategorija.id }}" data-id="kategorija{{ kategorija.id }}" data-toggle="collapse" data-parent="#accordian" href="#{{ kategorija.id }}">
+										<!--ako ima podkategoriju ili su podkategorija brendovi-->
+										{% if kategorija.podkategorije.all or kategorija.kategorija == "DATA-USB KABLOVI" %}
+										<a class="pretraga" data-id="kategorija{{ kategorija.id }}" data-toggle="collapse" data-parent="#accordian" href="#{{ kategorija.id }}">
 											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
-										{% else %}
-										<a class="kategorija{{ kategorija.id }}" data-id="kategorija{{ kategorija.id }}" href="javascript:void(0)">
-										{% endif %}
 											{{ kategorija }}
 										</a>
+										{% else %}
+											<a class="pretraga" data-id="kategorija{{ kategorija.id }}" href="javascript:void(0)">{{ kategorija }}</a>
+										{% endif %}
 									</h4>
 								</div>
-
+								<!--ako ima podkategorije-->
+								{% if kategorija.podkategorije.all %}
 								<div id="{{ kategorija.id }}" class="panel-collapse collapse">
 									<div class="panel-body">
 										<ul>
-											{% if kategorija.podkategorije.all %}
                                             {% for podkategorija in kategorija.podkategorije.all %}
 											<li>
+												<!--ako ima tip ili brend-->
 												{% if kategorija.kategorija == "PUNJAČI" or kategorija.kategorija == "DATA-USB KABLOVI" or kategorija.kategorija == "FUTROLE"  %}
-												<a class="podkategorija{{ podkategorija.id }}" data-id="podkategorija{{ podkategorija.id }}" data-toggle="collapse" href="#{{ kategorija.id }}{{ podkategorija.id }}">
+												<a class="pretraga" data-id="kategorija{{ kategorija.id }}_podkategorija{{ podkategorija.id }}" data-toggle="collapse" href="#{{ kategorija.id }}{{ podkategorija.id }}">
 													<span class="badge pull-right"><i class="fa fa-plus"></i></span>
-												{% else %}
-												<a class="podkategorija{{ podkategorija.id }}" data-id="podkategorija{{ podkategorija.id }}" href="javascript:void(0)">
-												{% endif %}
 													<b>{{ podkategorija.podkategorija }}</b>
 												</a>
+												{% else %}
+												<a class="pretraga" data-id="kategorija{{ kategorija.id }}_podkategorija{{ podkategorija.id }}" href="javascript:void(0)"><b>{{ podkategorija.podkategorija }}</b></a>
+												{% endif %}
 											</li>
+											<!--ako ima tip-->
 											{% if kategorija.kategorija == "PUNJAČI" or kategorija.kategorija == "DATA-USB KABLOVI" %}
 											<div id="{{ kategorija.id }}{{ podkategorija.id }}" class="collapse">
 												<ul>
 												{% for tip in tipovi %}
-													<li><a data-id="tip{{ tip.id }}" href="javascript:void(0)">{{ tip.tip }}</a></li>
+													<li><a class="pretraga" data-id="kategorija{{ kategorija.id }}_podkategorija{{ podkategorija.id }}_tip{{ tip.id }}" href="javascript:void(0)">{{ tip.tip }}</a></li>
 												{% endfor %}
 												</ul>
 											</div>
 											{% endif %}
+											<!--ako ima brend-->
 											{% if kategorija.kategorija == "FUTROLE" %}
 											<div id="{{ kategorija.id }}{{ podkategorija.id }}" class="collapse">
 												<ul>
 												{% for brend in brendovi %}
-													<li><a data-id="brend{{ brend.id }}" href="javascript:void(0)">{{ brend.brend }}</a></li>
+													<li><a class="pretraga" data-id="kategorija{{ kategorija.id }}_podkategorija{{ podkategorija.id }}_brend{{ brend.id }}" href="javascript:void(0)">{{ brend.brend }}</a></li>
 												{% endfor %}
 												</ul>
 											</div>
 											{% endif %}
 											{% endfor %}
-											{% endif %}
-
 										</ul>
 									</div>
 								</div>
+								{% endif %}
+								<!--ako su podkategorija brendovi (NE SME DA IMA PODKATEGORIJU)-->
+								<!--{% if kategorija.kategorija == "DATA-USB KABLOVI" %}-->
+								<!--<div id="{{ kategorija.id }}" class="panel-collapse collapse">-->
+									<!--<div class="panel-body">-->
+										<!--<ul>-->
+                                            <!--{% for brend in brendovi %}-->
+											<!--<li>-->
+												<!--<a class="pretraga" data-id="kategorija{{ kategorija.id }}_brend{{ brend.id }}" href="javascript:void(0)"><b>{{ brend.brend }}</b></a>-->
+											<!--</li>-->
+											<!--{% endfor %}-->
+										<!--</ul>-->
+									<!--</div>-->
+								<!--</div>-->
+								<!--{% endif %}-->
 							</div>
                             {% endfor %}
 						</div><!--/category-products-->
@@ -166,18 +183,19 @@
 							<div id="filter_artikli" class="category-tab"><!--category-tab-->
                                 <!--Ovo brise jquery filter-->
                                 {% for artikal in random_artikli %}
+
 								<div class="col-sm-4">
 									<div class="product-image-wrapper">
 										<div class="single-products">
 											<div class="productinfo text-center">
-												<a class="stop jq" href="artikal/{{ artikal.id }}">
+												<a class="artikal_detail" href="javascript:void(0)" id="{{ artikal.id }}">
 												{% if artikal.slika %}
 												<img src="{{ artikal.slika.url }}" alt="" />
 												{% endif %}
 												</a>
 												<h2>{{ artikal.cena }} din</h2>
 												<p>{{ artikal.opis }}</p>
-                                                <button id="{{ artikal.id }}" class="btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button>
+													<button id="{{ artikal.id }}" class="u_korpu btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button>
 											</div>
 										</div>
 									</div>
@@ -203,14 +221,14 @@
 										<div class="product-image-wrapper">
 											<div class="single-products">
 												<div class="productinfo text-center">
-													<a class="stop jq" href="artikal/{{ artikal.id }}">
+													<a class="artikal_detail" href="javascript:void(0)" id="{{ artikal.id }}">
 													{% if artikal.slika %}
 													<img src="{{ artikal.slika.url }}" alt="" />
 													{% endif %}
 													</a>
 													<h2>{{ artikal.cena }}</h2>
 													<p>{{ artikal.opis }}</p>
-													<button id="{{ artikal.id }}" class="btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button>
+													<button id="{{ artikal.id }}" class="u_korpu btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button>
 												</div>
 											</div>
 										</div>
@@ -232,10 +250,10 @@
 								{% endfor %}
 
 							</div>
-							 <a class="stop jq left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
+							 <a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
 								<i class="fa fa-angle-left"></i>
 							  </a>
-							  <a class="stop jq right recommended-item-control" href="#recommended-item-carousel" data-slide="next">
+							  <a class="right recommended-item-control" href="#recommended-item-carousel" data-slide="next">
 								<i class="fa fa-angle-right"></i>
 							  </a>			
 						</div>
@@ -245,81 +263,171 @@
 			</div>
 		</div>
 	</section>
+	<div id="all_modals">
+		{% for artikal in random_artikli %}
+		<div id="modal{{ artikal.id }}" class="modal" tabindex="-1" role="dialog">
+		  <div class="modal-dialog" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h5 class="modal-title"></h5>
+				  <p>Artikal ID: #{{ artikal.id }}</p>
+			  </div>
+			  <div class="modal-body">
+				<img width="360" height="500" class="velika_slika glavna_slika" src="{{ artikal.slika.url }}" alt="" />
+				  <div class="image-grid">
+					  <a class="mala_slika image" href="javascript:void(0)"><img width="60" height="83" src="{{ artikal.slika.url }}" alt=""></a>
+						{% for slika in artikal.dodatne_slike.all %}
+						<a class="mala_slika image" data-id="slika{{ slika.id }}" href="javascript:void(0)"><img width="60" height="83" src="{{ slika.slika.url }}" alt=""></a>
+						{% endfor %}
+					</div>
+				<h4>{{ artikal.opis }}</h4>
+				<h3>{{ artikal.cena }} din</h3>
+
+
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Nazad</button>
+			  </div>
+			</div>
+		  </div>
+		</div>
+		{% endfor %}
+	</div>
+	<div id="modals_akcija">
+		{% for artikal in artikli_na_akciji %}
+			<div id="modal{{ artikal.id }}" class="modal" tabindex="-1" role="dialog">
+			  <div class="modal-dialog" role="document">
+				<div class="modal-content">
+				  <div class="modal-header">
+					<h5 class="modal-title"></h5>
+					  <p>Artikal ID: #{{ artikal.id }}</p>
+				  </div>
+				  <div class="modal-body">
+					<img width="360" height="500" class="velika_slika glavna_slika" src="{{ artikal.slika.url }}" alt="" />
+					  <div class="image-grid">
+						  <a class="mala_slika image" href="javascript:void(0)"><img width="60" height="83" src="{{ artikal.slika.url }}" alt=""></a>
+							{% for slika in artikal.dodatne_slike.all %}
+							<a class="mala_slika image" data-id="slika{{ slika.id }}" href="javascript:void(0)"><img width="60" height="83" src="{{ slika.slika.url }}" alt=""></a>
+							{% endfor %}
+						</div>
+					<h4>{{ artikal.opis }}</h4>
+					<h3>{{ artikal.cena }} din</h3>
+
+
+				  </div>
+				  <div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Nazad</button>
+				  </div>
+				</div>
+			  </div>
+			</div>
+		{% endfor %}
+	</div>
 {% endblock %}
 {% block jquery %}
+	jQuery(document.body).on('click', '.artikal_detail', function() {
+	var id = $(this).attr('id');
+	//console.log(id);
+	var modal_to_show = '#modal' + id;
+		$(modal_to_show).modal('show');
+	});
+	// male slike
+	jQuery(document.body).on('click', '.mala_slika', function() {
+		var nova_putanja = $(this).children('img').attr('src');
+		var $imageContainer = $(this).parent().prev('.velika_slika');
+		$imageContainer.attr('src', nova_putanja);
+	});
+	// dodaj proizvod u korpu
+    jQuery(document.body).on('click', '.u_korpu', function() {
+		var artikal_id = this.id;
+		$.ajax({
+			context: this,
+			url: '/dodaj_artikal/',
+			data: {
+				   'artikal_id': artikal_id
+			},
+			dataType: 'json',
+			success: function (data) {
+				if (data.error) {
+					window.location = '/logovanje/';
+				} else{
+					$('html, body').animate({
+						'scrollTop' : $("#korpa").position().top
+					});
 
-    //$(":button").click(function() {
-    jQuery(document.body).on('click', ':button', function() {
-        //console.log(this.id);
-        if(this.id != "pretrazi_artikle"){
-            var artikal_id = this.id;
-            $.ajax({
-                context: this,
-                url: '/dodaj_artikal/',
-                data: {
-                       'artikal_id': artikal_id
-                },
-                dataType: 'json',
-                success: function (data) {
-                    if (data.error) {
-                        window.location = '/logovanje/';
-                    } else{
-                        $('html, body').animate({
-                            'scrollTop' : $("#korpa").position().top
-                        });
-
-                        var itemImg = $(this).parent().find('img').eq(0);
-                        flyToElement($(itemImg), $('#korpa'));
-                        $("#korpa").html(data.proizvoda_u_korpi);
-                        $(this).hide();
-                    }
-                }
-            });
-        }
+					var itemImg = $(this).parent().find('img').eq(0);
+					flyToElement($(itemImg), $('#korpa'));
+					$("#korpa").html(data.proizvoda_u_korpi);
+					$(this).hide();
+				}
+			}
+		});
     });
-    // class="stop jq" dodato svugde na index i base na elemente "a", da se ne dobija greska ako nije pretraga!!!
-    $('a:not([class^="stop jq"])').on("click",function(){
-		var kategorija_ili_podkategorija =  $(this).data("id");
-		//var parent = $(this).closest('div').attr('id');
-		//var kategorija = $('html').find('a[class^="kategorija"]').data("id");
-		var kategorija = $(this).parents().addBack().prevAll().find('a[class^="kategorija"]').addBack('a[class^="kategorija"]').last().data("id");
-		var podkategorija = $(this).parents().addBack().prevAll().find('a[class^="podkategorija"]').addBack('a[class^="podkategorija"]').last().data("id");
-		//console.log(kategorija);
-		//console.log(podkategorija);
+    $('.pretraga').on("click",function(){
+		var artikli_za_filter =  $(this).data("id");
 		$.ajax({
 			context: this,
 			url: '/filter/',
 			data: {
-				   'kategorija_ili_podkategorija': kategorija_ili_podkategorija,
-				   'kategorija': kategorija,
-				   'podkategorija': podkategorija
+				   'artikli_za_filter': artikli_za_filter
 			},
 			dataType: 'json',
 			success: function (data) {
 				$("#filter_artikli").html("");
+				$("#all_modals").html("");
 				if (data.length > 0) {
 					$("#filter_artikli").css('paddingBottom', '0px');
-					for (i = 0; i < data.length; i++){
+					for (i = 0; i < data[0].length; i++){
 						var line = '<div class="col-sm-3"> \
 									<div class="product-image-wrapper"> \
 										<div class="single-products"> \
 											<div class="productinfo text-center"> \
-												<a class="stop jq" href="artikal/'+data[i].id+'"> \
-												<img src="/media/' + data[i].slika + '" alt="" /> \
+												<a class="artikal_detail" href="javascript:void(0)" id="'+data[0][i].id+'"> \
+												<img src="/media/' + data[0][i].slika + '" alt="" /> \
 												</a> \
-												<h2>' + data[i].cena + 'din</h2> \
-												<p>' + data[i].opis + '</p> \
-												<button id="' + data[i].id + '" class="btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button> \
+												<h2>' + data[0][i].cena + 'din</h2> \
+												<p>' + data[0][i].opis + '</p> \
+												<button id="' + data[0][i].id + '" class="u_korpu btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button> \
 											</div> \
 										</div> \
 									</div> \
 								</div>';
 						$("#filter_artikli").append(line);
+
+						var modal_line = '<div id="modal'+data[0][i].id+'" class="modal" tabindex="-1" role="dialog"> \
+										  <div class="modal-dialog" role="document"> \
+											<div class="modal-content"> \
+											  <div class="modal-header"> \
+												<h5 class="modal-title"></h5> \
+												  <p>Artikal ID: #'+data[0][i].id+'</p> \
+											  </div> \
+											  <div class="modal-body"> \
+												<img width="360" height="500" class="velika_slika glavna_slika" src="/media/' + data[0][i].slika + '" alt="" /> \
+												  <div class="image-grid"> \
+													  <a class="mala_slika image" href="javascript:void(0)"><img width="60" height="83" src="/media/' + data[0][i].slika + '" alt=""></a>';
+														for (j = 0; j < data[1].length; j++){
+													  		if (data[1][j].artikal_id == data[0][i].id){
+														var imageLine = '<a class="mala_slika image" data-id="data[1][j].id" href="javascript:void(0)"><img width="60" height="83" src="/media/' + data[1][j].slika + '" alt=""></a>'
+													  	modal_line = modal_line + imageLine;
+													  		}
+														}
+						lineRest = '							</div> \
+												<h4>'+ data[0][i].opis +'</h4> \
+												<h3>'+ data[0][i].cena +' din</h3> \
+											  </div> \
+											  <div class="modal-footer"> \
+												<button type="button" class="btn btn-secondary" data-dismiss="modal">Nazad</button> \
+											  </div> \
+											</div> \
+										  </div> \
+										</div>';
+						modal_line = modal_line + lineRest;
+						$("#all_modals").append(modal_line);
 					}
 				}
 				else{
 					$("#filter_artikli").css('paddingBottom', '450px');
-					var line = '<h4>Trenutno nema proizvoda u ovoj sekciji</h4>';
+					var line = '<h4 class="title text-center">Trenutno nema proizvoda u ovoj sekciji</h4>';
 					$("#filter_artikli").append(line);
 				}
 			}
@@ -342,28 +450,60 @@
 			dataType: 'json',
 			success: function (data) {
 				$("#filter_artikli").html("");
+				$("#all_modals").html("");
 				if (data.length > 0) {
-					for (i = 0; i < data.length; i++){
+					for (i = 0; i < data[0].length; i++){
 						var line = '<div class="col-sm-3"> \
 									<div class="product-image-wrapper"> \
 										<div class="single-products"> \
 											<div class="productinfo text-center"> \
-												<a class="stop jq" href="artikal/'+data[i].id+'"> \
-												<img src="/media/' + data[i].slika + '" alt="" /> \
+												<a class="artikal_detail" href="javascript:void(0)" id="'+data[0][i].id+'"> \
+												<img src="/media/' + data[0][i].slika + '" alt="" /> \
 												</a> \
-												<h2>' + data[i].cena + 'din</h2> \
-												<p>' + data[i].opis + '</p> \
-												<button id="' + data[i].id + '" class="btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button> \
+												<h2>' + data[0][i].cena + 'din</h2> \
+												<p>' + data[0][i].opis + '</p> \
+												<button id="' + data[0][i].id + '" class="u_korpu btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button> \
 											</div> \
 										</div> \
 									</div> \
 								</div>';
 						$("#filter_artikli").append(line);
+
+						var modal_line = '<div id="modal'+data[0][i].id+'" class="modal" tabindex="-1" role="dialog"> \
+										  <div class="modal-dialog" role="document"> \
+											<div class="modal-content"> \
+											  <div class="modal-header"> \
+												<h5 class="modal-title"></h5> \
+												  <p>Artikal ID: #'+data[0][i].id+'</p> \
+											  </div> \
+											  <div class="modal-body"> \
+												<img width="360" height="500" class="velika_slika glavna_slika" src="/media/' + data[0][i].slika + '" alt="" /> \
+												  <div class="image-grid"> \
+													  <a class="mala_slika image" href="javascript:void(0)"><img width="60" height="83" src="/media/' + data[0][i].slika + '" alt=""></a>';
+														for (j = 0; j < data[1].length; j++){
+													  		if (data[1][j].artikal_id == data[0][i].id){
+														var imageLine = '<a class="mala_slika image" data-id="data[1][j].id" href="javascript:void(0)"><img width="60" height="83" src="/media/' + data[1][j].slika + '" alt=""></a>'
+													  	modal_line = modal_line + imageLine;
+													  		}
+														}
+						lineRest = '							</div> \
+												<h4>'+ data[0][i].opis +'</h4> \
+												<h3>'+ data[0][i].cena +' din</h3> \
+											  </div> \
+											  <div class="modal-footer"> \
+												<button type="button" class="btn btn-secondary" data-dismiss="modal">Nazad</button> \
+											  </div> \
+											</div> \
+										  </div> \
+										</div>';
+						modal_line = modal_line + lineRest;
+						$("#all_modals").append(modal_line);
 					}
 
 				}
 				else{
-					var line = '<h4>Trenutno nema proizvoda za traženi kriterijum</h4>';
+					$("#filter_artikli").css('paddingBottom', '450px');
+					var line = '<h4 class="title text-center">Trenutno nema proizvoda za traženi kriterijum</h4>';
 					$("#filter_artikli").append(line);
 				}
 			}

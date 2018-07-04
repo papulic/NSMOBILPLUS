@@ -20,6 +20,7 @@ def index(request):
     user = None
     artikli = Artikal.objects.filter(na_stanju=True).order_by('kategorija')
     artikli_na_akciji = Artikal.objects.filter(na_akciji=True)
+    artikli_na_akciji_ids = artikli_na_akciji.values_list("id", flat=True)
     sve_kategorije = Kategorija.objects.all()
     tipovi = Tip.objects.all()
     brendovi = Brend.objects.all()
@@ -27,7 +28,8 @@ def index(request):
     #     random_artikli = [artikli[i] for i in random.sample(range(1, len(artikli)), 15)]
     # except ValueError:
     #     random_artikli = [artikli[i] for i in random.sample(range(1, len(artikli)), len(artikli) - 1)]
-    random_artikli = Artikal.objects.filter(na_stanju=True).order_by('-broj_pregleda')[:15]
+    random_artikli = Artikal.objects.filter(na_stanju=True).exclude(pk__in=list(artikli_na_akciji_ids)).order_by('-broj_pregleda')[:15]
+
     if request.user.is_authenticated():
         user = request.user
 
@@ -52,7 +54,6 @@ def add_artikal(request):
     user = request.user
     if user.username != "":
         artikal_id = request.GET.get('artikal_id', None)
-        komada = request.GET.get('komada', None)
         artikal = Artikal.objects.get(pk=artikal_id)
         try:
             korpa = user.korpe.get(potvrdjena=False)
@@ -63,18 +64,10 @@ def add_artikal(request):
             korpa.user = user
             korpa.save()
         unos = Entry(korpa=korpa, artikal=artikal)
-        if komada:
-            unos.ukupno = artikal.cena * int(komada)
-            unos.quantity = int(komada)
-        else:
-            unos.ukupno = artikal.cena
+        unos.ukupno = artikal.cena
         unos.save()
-        if komada:
-            korpa.ukupno += artikal.cena * int(komada)
-            korpa.ukupno_proizvoda_u_korpi += int(komada)
-        else:
-            korpa.ukupno += artikal.cena
-            korpa.ukupno_proizvoda_u_korpi += 1
+        korpa.ukupno += artikal.cena
+        korpa.ukupno_proizvoda_u_korpi += 1
         korpa.save()
         data = {'proizvoda_u_korpi': korpa.ukupno_proizvoda_u_korpi}
     else:
@@ -88,35 +81,27 @@ def add_artikal(request):
 
 def filter(request):
     artikli = None
-    kategorija_ili_podkategorija = request.GET.get('kategorija_ili_podkategorija', None)
-    kategorija = request.GET.get('kategorija', None)
-    podkategorija = request.GET.get('podkategorija', None)
-    if kategorija_ili_podkategorija.startswith('kategorija'):
-        kategorija_id = kategorija_ili_podkategorija.split('kategorija')[1]
-        artikli = Artikal.objects.filter(kategorija_id=kategorija_id)
-    elif kategorija_ili_podkategorija.startswith('podkategorija'):
-        podkategorija_id = kategorija_ili_podkategorija.split('podkategorija')[1]
-        artikli = Artikal.objects.filter(podkategorija_id=podkategorija_id)
-    elif kategorija_ili_podkategorija.startswith('tip'):
-        tip_id = kategorija_ili_podkategorija.split('tip')[1]
-        artikli = Artikal.objects.filter(tip_id=tip_id)
-        if kategorija:
-            kategorija_id = kategorija.split('kategorija')[1]
-            artikli = artikli.filter(kategorija_id=kategorija_id)
-        if podkategorija:
-            podkategorija_id = podkategorija.split('podkategorija')[1]
-            artikli = artikli.filter(podkategorija_id=podkategorija_id)
-    elif kategorija_ili_podkategorija.startswith('brend'):
-        brend_id = kategorija_ili_podkategorija.split('brend')[1]
-        artikli = Artikal.objects.filter(brend_id=brend_id)
-        if kategorija:
-            kategorija_id = kategorija.split('kategorija')[1]
-            artikli = artikli.filter(kategorija_id=kategorija_id)
-        if podkategorija:
-            podkategorija_id = podkategorija.split('podkategorija')[1]
-            artikli = artikli.filter(podkategorija_id=podkategorija_id)
+    artikli_za_filter = request.GET.get('artikli_za_filter', None)
+    artikli_za_filter = artikli_za_filter.split("_")
+    kategorija_id = artikli_za_filter[0].split("kategorija")[1]
+    artikli = Artikal.objects.filter(kategorija_id=kategorija_id)
+    if len(artikli_za_filter) > 1:
+        for i in artikli_za_filter:
+            if 'podkategorija' in i:
+                podkategorija_id = i.split("podkategorija")[1]
+                artikli = artikli.filter(podkategorija_id=podkategorija_id)
+            elif 'tip' in i:
+                tip_id = i.split("tip")[1]
+                artikli = artikli.filter(tip_id=tip_id)
+            elif 'brend' in i:
+                brend_id = i.split("brend")[1]
+                artikli = artikli.filter(brend_id=brend_id)
     if artikli:
-        data = list(artikli.values())
+        artikli_ids = artikli.values_list("id", flat=True)
+        slike = Slika.objects.filter(pk__in=list(artikli_ids))
+        data = [[],[]]
+        data[0] = list(artikli.values())
+        data[1] = list(slike.values())
     else:
         data = {}
     return JsonResponse(data, safe=False)
@@ -137,11 +122,16 @@ def pretraga(request):
             nova_pretraga.save()
     if len(splited) > 0:
         artikli = Artikal.objects.filter(opis_za_filter__icontains=splited[0])
-        for pos, i in enumerate(splited):
-            if pos > 0:
-                artikli = artikli.filter(opis_za_filter__icontains=i)
+        if len(splited) > 1:
+            for pos, i in enumerate(splited):
+                if pos > 0:
+                    artikli = artikli.filter(opis_za_filter__icontains=i)
     if artikli:
-        data = list(artikli.values())
+        artikli_ids = artikli.values_list("id", flat=True)
+        slike = Slika.objects.filter(pk__in=list(artikli_ids))
+        data = [[], []]
+        data[0] = list(artikli.values())
+        data[1] = list(slike.values())
     else:
         data = {}
     return JsonResponse(data, safe=False)
@@ -368,19 +358,21 @@ def potvrdi_korpu(request, korpa_id):
     messages.success(request, 'Hvala na kupovini! Detalje o vašim porudžbinama možete videti u sekciji Moj nalog.')
     return HttpResponseRedirect("/")
 
-def artikal_detalji(request, artikal_id):
-    artikal = Artikal.objects.get(pk=artikal_id)
-    artikal.broj_pregleda += 1
-    artikal.save()
-    ostale_slike = Slika.objects.filter(artikal=artikal)
-    proizvoda_u_korpi = 0
-    user = request.user
-    try:
-        korpa = user.korpe.get(potvrdjena=False)
-        proizvoda_u_korpi = korpa.ukupno_proizvoda_u_korpi
-    except:
-        pass
-    return render(request, 'eprodaja/product-details.html', {'artikal': artikal, 'ostale_slike': ostale_slike, 'proizvoda_u_korpi': proizvoda_u_korpi})
+
+# treba ako nema jquery
+# def artikal_detalji(request, artikal_id):
+#     artikal = Artikal.objects.get(pk=artikal_id)
+#     artikal.broj_pregleda += 1
+#     artikal.save()
+#     ostale_slike = Slika.objects.filter(artikal=artikal)
+#     proizvoda_u_korpi = 0
+#     user = request.user
+#     try:
+#         korpa = user.korpe.get(potvrdjena=False)
+#         proizvoda_u_korpi = korpa.ukupno_proizvoda_u_korpi
+#     except:
+#         pass
+#     return render(request, 'eprodaja/product-details.html', {'artikal': artikal, 'ostale_slike': ostale_slike, 'proizvoda_u_korpi': proizvoda_u_korpi})
 
 def error_404(request):
     return render(request, 'eprodaja/404.html')

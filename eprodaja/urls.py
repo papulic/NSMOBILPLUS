@@ -18,5 +18,5 @@ urlpatterns = [
     url(r'^dodaj_artikal/$', views.add_artikal, name='add_artikal'),
     url(r'^filter/$', views.filter, name='filter'),
     url(r'^pretraga/$', views.pretraga, name='pretraga'),
-    url(r'^artikal/(?P<artikal_id>[0-9]+)/$', views.artikal_detalji, name='artikal_detalji'),
+    # url(r'^artikal/(?P<artikal_id>[0-9]+)/$', views.artikal_detalji, name='artikal_detalji'), # treba ako nema jquery
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

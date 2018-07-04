@@ -1253,6 +1253,7 @@ h2.title {
   margin-top: 18px;
 }
 
+
 .product-information span span {
   color: #FE980F;
   float: left;
@@ -2544,8 +2545,8 @@ h2.title {
     -webkit-flex-wrap: wrap;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    margin-bottom: 20em;
-    margin-left: 7em;
+    margin-bottom: 2em;
+    margin-left: 4em;
 }
 .image-grid .image {
     margin: 10px;
@@ -2557,3 +2558,8 @@ h2.title {
     -ms-transition: all .2s ease-in-out;
 }
 
+
+.input-xs {
+
+  width: 50px;
+}

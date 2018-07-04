@@ -53,3 +53,8 @@ umesto slova ns mobilplus  ->  logo  --  ok
 
 sa stranice detalji ubacivanje u korpu kroz istu funkciju
 
+
+
+index bez jquery pretrage nije gotov search box
+
+update div all modals
