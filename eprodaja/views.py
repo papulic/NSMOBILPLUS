@@ -12,8 +12,7 @@ from django.core.mail import EmailMessage
 from .forms import UserLoginForm, UserRegisterForm, DetaljiForm
 from . models import Poruke, Detalji_korisnika, Korpa, Artikal, Kategorija, Podkategorija, Brend, Entry, Tip, Slika, Pretraga
 from django.http import JsonResponse
-from django.contrib import messages
-import random
+# import random
 
 
 def index(request):
@@ -167,7 +166,7 @@ def login_user(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    messages.success(request, '{username}, dobrodošli!'.format(username=user.username))
+                    messages.warning(request, '{username}, dobrodošli!'.format(username=user.username))
                     return HttpResponseRedirect('/')
                 else:
                     messages.error(request, 'Vaš nalog je suspendovan')
@@ -239,7 +238,7 @@ def logout_user(request):
     except:
         user = "Korisnik"
     logout(request)
-    messages.success(request, 'Doviđenja {username}, dođite nam opet!'.format(username=user.username))
+    messages.warning(request, 'Doviđenja {username}, dođite nam opet!'.format(username=user.username))
     return HttpResponseRedirect(reverse('eprodaja:index'))
 
 
@@ -263,7 +262,7 @@ def kontakt(request):
         nova_poruka.tema = tema
         nova_poruka.poruka = poruka
         nova_poruka.save()
-        messages.success(request, '{username}, hvala vam što ste nas kontaktirali!'.format(username=username))
+        messages.warning(request, '{username}, hvala vam što ste nas kontaktirali!'.format(username=username))
         return HttpResponseRedirect(reverse('eprodaja:kontakt'))
     return render(request, 'eprodaja/contact-us.html', {'user': user, 'proizvoda_u_korpi': proizvoda_u_korpi})
 
