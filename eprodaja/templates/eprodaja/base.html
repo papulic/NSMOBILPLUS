@@ -73,6 +73,10 @@
                             </div>
                           </div>
                         </div>
+                        {% elif message.tags == 'warning' %}
+                        <h4>{{ message }}</h4>
+                        {% elif message.tags == 'error' %}
+                        <h4><font color="red">{{ message }}</font></h4>
                         {% endif %}
                         {% endfor %}
                         {% endif %}
