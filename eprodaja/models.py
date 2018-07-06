@@ -8,10 +8,10 @@ from django.core.validators import RegexValidator
 
 class Detalji_korisnika(models.Model):
     korisnik = models.OneToOneField(User, on_delete=models.CASCADE)
-    adresa = models.CharField(max_length=50)
-    postanski_broj = models.CharField(max_length=5, validators=[RegexValidator(regex='^.{5}$', message='Poštanski broj mora imati 5 cifara', code='Poštanski broj mora imati 5 cifara')])
-    grad = models.CharField(max_length=25)
-    kontakt_telefon = models.CharField(max_length=15)
+    adresa = models.CharField(max_length=50, blank=True)
+    postanski_broj = models.CharField(max_length=5, validators=[RegexValidator(regex='^.{5}$', message='Poštanski broj mora imati 5 cifara', code='Poštanski broj mora imati 5 cifara')], blank=True)
+    grad = models.CharField(max_length=25, blank=True)
+    kontakt_telefon = models.CharField(max_length=15, blank=True)
 
     def __unicode__(self):
         return self.korisnik.username
@@ -74,14 +74,7 @@ class Artikal(models.Model):
     broj_pregleda = models.IntegerField(default=0)
 
     def __unicode__(self):
-        if self.podkategorija and self.tip:
-            return str(self.id) + "_" + self.kategorija.kategorija + "_" + self.podkategorija.podkategorija + "_" + self.tip.tip + "_" + self.opis
-        elif self.podkategorija and self.brend:
-            return str(self.id) + "_" + self.kategorija.kategorija + "_" + self.podkategorija.podkategorija + "_" + self.brend.brend + "_" + self.opis
-        elif self.podkategorija:
-            return str(self.id) + "_" + self.kategorija.kategorija + "_" + self.podkategorija.podkategorija + "_" + self.opis
-        else:
-            return str(self.id) + "_" + self.kategorija.kategorija + "_" + self.opis
+        return "id: {id} - kat: {kategorija} - pod.kat: {podkategorija} - tip: {tip} - brend: {brend} - opis; {opis}".format(id=str(self.id), kategorija=self.kategorija, podkategorija=self.podkategorija, tip=self.tip, brend=self.brend, opis=self.opis)
 
     class Meta:
         verbose_name_plural = "Artikli"

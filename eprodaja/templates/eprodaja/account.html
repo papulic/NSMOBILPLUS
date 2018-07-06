@@ -18,6 +18,15 @@
 				<p>Informacije o porudžbinama</p>
 			</div><!--/register-req-->
 
+			{% if messages %}
+			<div  id="adresa" class="error-message-div">
+			{% for message in messages %}
+			{% if message.tags == 'error' %}
+			<h4><font color="red"> {{ message }}</font></h4>
+			{% endif %}
+			{% endfor %}
+			</div>
+			{% endif %}
 			<div class="shopper-informations">
 				<div class="row">
 					<div class="col-sm-3">

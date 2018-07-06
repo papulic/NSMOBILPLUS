@@ -2558,8 +2558,11 @@ h2.title {
     -ms-transition: all .2s ease-in-out;
 }
 
-
 .input-xs {
 
   width: 50px;
+}
+
+.error-message-div{
+    padding-top: 70px;
 }

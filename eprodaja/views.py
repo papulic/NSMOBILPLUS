@@ -13,6 +13,7 @@ from .forms import UserLoginForm, UserRegisterForm, DetaljiForm
 from . models import Poruke, Detalji_korisnika, Korpa, Artikal, Kategorija, Podkategorija, Brend, Entry, Tip, Slika, Pretraga
 from django.http import JsonResponse
 # import random
+import datetime
 
 
 def index(request):
@@ -270,7 +271,7 @@ def kontakt(request):
 def nalog(request, user_id):
     user = User.objects.get(pk=user_id)
     detalji_korisnika = Detalji_korisnika.objects.get(korisnik=user)
-    korpe = Korpa.objects.filter(user=user, potvrdjena=True).order_by('datum')
+    korpe = Korpa.objects.filter(user=user, potvrdjena=True).order_by('-datum')
     proizvoda_u_korpi = 0
     try:
         korpa = user.korpe.get(potvrdjena=False)
@@ -353,7 +354,23 @@ def korpa_detalji(request, korpa_id):
 
 def potvrdi_korpu(request, korpa_id):
     korpa = Korpa.objects.get(pk=korpa_id)
+    error = False
+    if korpa.user.detalji_korisnika.adresa == "":
+        messages.error(request, 'Molim vas unesite ispravne podatke "Ulica i broj".')
+        error = True
+    elif korpa.user.detalji_korisnika.postanski_broj == "":
+        messages.error(request, 'Molim vas unesite ispravne podatke "Poštanski broj".')
+        error = True
+    elif korpa.user.detalji_korisnika.grad == "":
+        messages.error(request, 'Molim vas unesite ispravne podatke "Grad".')
+        error = True
+    elif korpa.user.detalji_korisnika.kontakt_telefon == "":
+        messages.error(request, 'Molim vas unesite ispravne podatke "Kontakt telefon".')
+        error = True
+    if error:
+        return HttpResponseRedirect('/nalog/{user_id}#adresa'.format(user_id=korpa.user.id))
     korpa.potvrdjena = True
+    korpa.datum = datetime.date.today()
     korpa.save()
     messages.success(request, 'Hvala na kupovini! Detalje o vašim porudžbinama možete videti u sekciji Moj nalog.')
     return HttpResponseRedirect("/")

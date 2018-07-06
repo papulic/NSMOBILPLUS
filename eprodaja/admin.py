@@ -19,6 +19,7 @@ class KorisnikKorpaInline(admin.TabularInline):
 class EntryKorpaInline(admin.TabularInline):
     model = Entry
     extra = 0
+    readonly_fields = ('artikal', 'quantity', 'ukupno')
 
 class PodkategorijaInline(admin.TabularInline):
     model = Podkategorija
@@ -56,7 +57,7 @@ class KorpaModelAdmin(admin.ModelAdmin):
     list_filter = ["user__username", "potvrdjena", "otpremljena"]
     list_editable = ["otpremljena"]
     inlines = [EntryKorpaInline, ]
-    readonly_fields = ['ime', 'mail', 'adresa', 'tel']
+    readonly_fields = ['potvrdjena', 'datum', 'user', 'ukupno', 'ukupno_proizvoda_u_korpi', 'ime', 'mail', 'adresa', 'tel']
 
 
 class Detalji_korisnikaModelAdmin(admin.ModelAdmin):
