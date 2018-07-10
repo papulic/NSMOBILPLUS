@@ -11,19 +11,19 @@ Mora da postoji kolicina proizvoda, npr 2 iste maske, 3 iste futrole...   ok
 
 ajax update template render proizvoda u korpi  --  ok
 
-smisliti drugaciji filter!!! definitivno ajax  --
+smisliti drugaciji filter!!! definitivno ajax  --  ok
 
-login page dve forme sa istim field id videti u konzoli  --  neka ostane tako..
+login page dve forme sa istim field id videti u konzoli  --  neka ostane tako..  --  ok
 
-Mozda sve jquery ajax!!  --
+Mozda sve jquery ajax!!  --  ok
 
-mozda artikal detalji page i da artikal ima polje broj pregleda pa uzeti prvih nekoliko i na pocetnu stranicu.
+mozda artikal detalji page i da artikal ima polje broj pregleda pa uzeti prvih nekoliko i na pocetnu stranicu.  --  ok
 
-cuvati pretrage!!
+cuvati pretrage!!  --  ok
 
-admin sajt korpa koji su proizvodi unutra.. i podaci korisnika
+admin sajt korpa koji su proizvodi unutra.. i podaci korisnika  --  ok
 
-artikal polje filter opis
+artikal polje filter opis  --  ok
 
 
 artikli
@@ -45,16 +45,8 @@ folije za ekran: podkategorija brendovi
 stakla-glass za ekran: podkategorija zakrivljena, obicna: podkategorija brendovi
 
 
-if tip or brend or nista
 
 srediti ajax gresku na index page kad se klikne drugi href koji nema kategorija ili podkategorija  -  ok
 
 umesto slova ns mobilplus  ->  logo  --  ok
 
-sa stranice detalji ubacivanje u korpu kroz istu funkciju
-
-
-
-index bez jquery pretrage nije gotov search box
-
-update div all modals
