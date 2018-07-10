@@ -39,6 +39,7 @@ def index(request):
         proizvoda_u_korpi = korpa.ukupno_proizvoda_u_korpi
     except:
         pass
+
     return render(request, 'eprodaja/index.html', {
             'user': user,
             'artikli_na_akciji': artikli_na_akciji,
@@ -130,6 +131,9 @@ def pretraga(request):
 
 def create_modal(request):
     artikal_id = request.GET.get('artikal_id', None)
+    art = Artikal.objects.get(pk=artikal_id)
+    art.broj_pregleda += 1
+    art.save()
     artikal = Artikal.objects.filter(pk=artikal_id)
     slike = Slika.objects.filter(artikal_id=artikal_id)
     data = [[], []]
