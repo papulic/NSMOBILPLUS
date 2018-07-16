@@ -36,3 +36,5 @@ stakla-glass za ekran: podkategorija zakrivljena, obicna: podkategorija brendovi
 umesto slova ns mobilplus  ->  logo  --  ok
 
 zoho mail, mozda je dovoljno !!
+
+Napomena: ... za svaku korpu! iznad dugmeta kupi.
