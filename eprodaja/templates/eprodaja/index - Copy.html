@@ -105,7 +105,7 @@
 								<div class="panel-heading">
 									<h4 class="panel-title">
 										<!--ako ima podkategoriju ili su podkategorija brendovi-->
-										{% if kategorija.podkategorije.all or kategorija.tipovi or kategorija.brendovi %}
+										{% if kategorija.podkategorije.all or kategorija.kategorija == "FOLIJE" %}
 										<a class="pretraga" data-id="kategorija{{ kategorija.id }}" data-toggle="collapse" data-parent="#accordian" href="#{{ kategorija.id }}">
 											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
 											{{ kategorija }}
@@ -123,7 +123,7 @@
                                             {% for podkategorija in kategorija.podkategorije.all %}
 											<li>
 												<!--ako ima tip ili brend-->
-												{% if kategorija.tipovi or kategorija.brendovi  %}
+												{% if kategorija.kategorija == "PUNJAČI" or kategorija.kategorija == "DATA-USB KABLOVI" or kategorija.kategorija == "FUTROLE"  %}
 												<a class="pretraga" data-id="kategorija{{ kategorija.id }}_podkategorija{{ podkategorija.id }}" data-toggle="collapse" href="#{{ kategorija.id }}{{ podkategorija.id }}">
 													<span class="badge pull-right"><i class="fa fa-plus"></i></span>
 													<b>{{ podkategorija.podkategorija }}</b>
@@ -133,7 +133,7 @@
 												{% endif %}
 											</li>
 											<!--ako ima tip-->
-											{% if kategorija.tipovi %}
+											{% if kategorija.kategorija == "PUNJAČI" or kategorija.kategorija == "DATA-USB KABLOVI" %}
 											<div id="{{ kategorija.id }}{{ podkategorija.id }}" class="collapse">
 												<ul>
 												{% for tip in tipovi %}
@@ -143,7 +143,7 @@
 											</div>
 											{% endif %}
 											<!--ako ima brend-->
-											{% if kategorija.brendovi %}
+											{% if kategorija.kategorija == "FUTROLE" %}
 											<div id="{{ kategorija.id }}{{ podkategorija.id }}" class="collapse">
 												<ul>
 												{% for brend in brendovi %}
@@ -156,8 +156,9 @@
 										</ul>
 									</div>
 								</div>
-								<!--ako su podkategorija brendovi (NE SME DA IMA PODKATEGORIJU) -->
-								{% elif kategorija.brendovi %}
+								{% endif %}
+								<!--ako su podkategorija brendovi (NE SME DA IMA PODKATEGORIJU)  POTREBNO DODATI GORE-->
+								{% if kategorija.kategorija == "FOLIJE" %}
 								<div id="{{ kategorija.id }}" class="panel-collapse collapse">
 									<div class="panel-body">
 										<ul>
@@ -169,8 +170,9 @@
 										</ul>
 									</div>
 								</div>
-								<!--ako su podkategorija tipovi (NE SME DA IMA PODKATEGORIJU) -->
-								{% elif kategorija.tipovi %}
+								{% endif %}
+								<!--ako su podkategorija tipovi (NE SME DA IMA PODKATEGORIJU)  POTREBNO DODATI GORE-->
+								{% if kategorija.kategorija == "???" %}
 								<div id="{{ kategorija.id }}" class="panel-collapse collapse">
 									<div class="panel-body">
 										<ul>
