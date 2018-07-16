@@ -373,6 +373,7 @@ def potvrdi_korpu(request, korpa_id):
         error = True
     if error:
         return HttpResponseRedirect('/nalog/{user_id}#adresa'.format(user_id=korpa.user.id))
+	# if request post uzeti tekst napomene
     korpa.potvrdjena = True
     korpa.datum = datetime.date.today()
     korpa.save()
