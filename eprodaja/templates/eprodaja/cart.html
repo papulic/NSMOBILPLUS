@@ -100,7 +100,9 @@
 						{% if korpa.ukupno < 2500 %}
 						<p>Da bi ostvarili besplatnu poštarinu korpa mora imati vrednost veću od 2500din</p>
 						{% endif %}
-						{% if unosi %}<button id="kupi" class="btn btn-default update" href="">Kupi</button>{% endif %}
+						{% if unosi %}
+						<button id="kupi" class="btn btn-default update" href="">Kupi</button>
+						{% endif %}
 					</div>
 				</div>
 				<div class="col-sm-6">
@@ -162,7 +164,14 @@
 			  <div class="modal-footer">
 				  <a href="{% url 'eprodaja:nalog' user.id %}"><button class="btn btn-secondary">Moj nalog</button></a>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Odustani</button>
-				  <a href="{% url 'eprodaja:potvrdi_korpu' korpa.id %}"><button class="btn btn-secondary btn-warning">Kupi</button></a>
+				  <hr>
+				  <div class="shopper-info">
+					  <form role="form" action="{% url 'eprodaja:potvrdi_korpu' korpa.id %}" method="post" enctype="multipart/form-data">
+						  {% csrf_token %}
+						  <input type="text" name="napomena" placeholder="Napomena...">
+						  <input type="submit" name="submit" class="btn btn-primary btn-warning" value="Kupi">
+					  </form>
+				  </div>
 			  </div>
 			</div>
 		  </div>
