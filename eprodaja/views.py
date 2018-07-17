@@ -373,12 +373,14 @@ def potvrdi_korpu(request, korpa_id):
         error = True
     if error:
         return HttpResponseRedirect('/nalog/{user_id}#adresa'.format(user_id=korpa.user.id))
-	# if request post uzeti tekst napomene
-    korpa.potvrdjena = True
-    korpa.datum = datetime.date.today()
-    korpa.save()
-    messages.success(request, 'Hvala na kupovini! Detalje o vašim porudžbinama možete videti u sekciji Moj nalog.')
-    return HttpResponseRedirect("/")
+    if request.method == "POST":
+        napomena = request.POST['napomena']
+        korpa.potvrdjena = True
+        korpa.datum = datetime.date.today()
+        korpa.napomena = napomena
+        korpa.save()
+        messages.success(request, 'Hvala na kupovini! Detalje o vašim porudžbinama možete videti u sekciji Moj nalog.')
+        return HttpResponseRedirect("/")
 
 
 # treba ako nema jquery

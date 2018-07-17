@@ -93,6 +93,7 @@ class Korpa(models.Model):
     datum = models.DateField(auto_now_add=True)
     ukupno = models.FloatField(default=0.0)
     ukupno_proizvoda_u_korpi = models.PositiveIntegerField(default=0)
+    napomena = models.CharField(max_length=100, blank=True)
     potvrdjena = models.BooleanField(default=False)
     otpremljena = models.BooleanField(default=False)
 
