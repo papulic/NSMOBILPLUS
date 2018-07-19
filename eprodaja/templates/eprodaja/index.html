@@ -200,7 +200,7 @@
 									<div class="product-image-wrapper">
 										<div class="single-products">
 											<div class="productinfo text-center">
-												<a class="artikal_detail" href="javascript:void(0)" id="{{ artikal.id }}">
+												<a class="artikal_detail" href="{{ artikal.slika.url }}" id="{{ artikal.id }}">
 												{% if artikal.slika %}
 												<img src="{{ artikal.slika.url }}" alt="" />
 												{% endif %}
@@ -233,7 +233,7 @@
 										<div class="product-image-wrapper">
 											<div class="single-products">
 												<div class="productinfo text-center">
-													<a class="artikal_detail" href="javascript:void(0)" id="{{ artikal.id }}">
+													<a class="artikal_detail" href="{{ artikal.slika.url }}" id="{{ artikal.id }}">
 													{% if artikal.slika %}
 													<img src="{{ artikal.slika.url }}" alt="" />
 													{% endif %}
@@ -281,7 +281,8 @@
 {% endblock %}
 {% block jquery %}
 	// napravi modal i prikazi
-	jQuery(document.body).on('click', '.artikal_detail', function() {
+	jQuery(document.body).on('click', '.artikal_detail', function(e) {
+		e.preventDefault();
 		$("#modal-artikal").html("");
 		var artikal_id = $(this).attr('id');
 		$.ajax({
@@ -302,9 +303,9 @@
 									  <div class="modal-body"> \
 										<img width="360" height="500" class="velika_slika glavna_slika" src="/media/' + data[0][0].slika + '" alt="" /> \
 										  <div class="image-grid"> \
-											  <a class="mala_slika image" href="javascript:void(0)"><img width="60" height="83" src="/media/' + data[0][0].slika + '" alt=""></a>';
+											  <a class="mala_slika image" href="/media/' + data[0][0].slika + '"><img width="60" height="83" src="/media/' + data[0][0].slika + '" alt=""></a>';
 												for (j = 0; j < data[1].length; j++){
-													var imageLine = '<a class="mala_slika image" data-id="data[1][j].id" href="javascript:void(0)"><img width="60" height="83" src="/media/' + data[1][j].slika + '" alt=""></a>';
+													var imageLine = '<a class="mala_slika image" data-id="data[1][j].id" href="/media/' + data[1][j].slika + '"><img width="60" height="83" src="/media/' + data[1][j].slika + '" alt=""></a>';
 												  	modal_line = modal_line + imageLine;
 												}
 				lineRest = '							</div> \
@@ -324,7 +325,8 @@
 		$("#modal-artikal").modal('show');
 	});
 	// male slike
-	jQuery(document.body).on('click', '.mala_slika', function() {
+	jQuery(document.body).on('click', '.mala_slika', function(e) {
+		e.preventDefault();
 		var nova_putanja = $(this).children('img').attr('src');
 		var $imageContainer = $(this).parent().prev('.velika_slika');
 		$imageContainer.attr('src', nova_putanja);
@@ -355,6 +357,9 @@
 			}
 		});
     });
+	$('.pretraga').on("contextmenu",function(){
+       return false;
+    });
     $('.pretraga').on("click",function(){
 		var artikli_za_filter =  $(this).data("id");
 		$.ajax({
@@ -373,7 +378,7 @@
 									<div class="product-image-wrapper"> \
 										<div class="single-products"> \
 											<div class="productinfo text-center"> \
-												<a class="artikal_detail" href="javascript:void(0)" id="'+data[i].id+'"> \
+												<a class="artikal_detail" href="/media/' + data[i].slika + '" id="'+data[i].id+'"> \
 												<img src="/media/' + data[i].slika + '" alt="" /> \
 												</a> \
 												<h2>' + data[i].cena + 'din</h2> \
@@ -417,7 +422,7 @@
 									<div class="product-image-wrapper"> \
 										<div class="single-products"> \
 											<div class="productinfo text-center"> \
-												<a class="artikal_detail" href="javascript:void(0)" id="'+data[i].id+'"> \
+												<a class="artikal_detail" href="/media/' + data[i].slika + '" id="'+data[i].id+'"> \
 												<img src="/media/' + data[i].slika + '" alt="" /> \
 												</a> \
 												<h2>' + data[i].cena + 'din</h2> \
