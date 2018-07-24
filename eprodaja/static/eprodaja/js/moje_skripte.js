@@ -123,7 +123,7 @@ $(document).ready(function () {
         });
     });
 
-	$('#main-contact-form').submit(function (e) {
+	$('#main-contact-form-search').submit(function (e) {
 		e.preventDefault();
 		$("#pretrazi_artikle").click();
 	});
