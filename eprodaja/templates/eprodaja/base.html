@@ -136,16 +136,7 @@
     <script src="{% static 'eprodaja/js/jquery.prettyPhoto.js' %}"></script>
     <script src="{% static 'eprodaja/js/main.js' %}"></script>
     <script src="{% static 'eprodaja/js/fly.js' %}"></script>
-<script>
-$(document).ready(function () {
-    $('#messagemodal').modal('show');
-{% block jquery %}
+    <script src="{% static 'eprodaja/js/moje_skripte.js' %}"></script>
 
-{% endblock %}
-});
-function goBack() {
-    window.history.back();
-}
-</script>
 </body>
 </html>
