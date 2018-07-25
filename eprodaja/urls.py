@@ -19,8 +19,9 @@ urlpatterns = [
     url(r'^dodaj_artikal/$', views.add_artikal, name='add_artikal'),
     url(r'^filter/$', views.filter, name='filter'),
     url(r'^pretraga/$', views.pretraga, name='pretraga'),
+    url(r'^onama/$', views.onama, name='onama'),
     url(r'^create_modal/$', views.create_modal, name='create_modal'),
     # url(r'^artikal/(?P<artikal_id>[0-9]+)/$', views.artikal_detalji, name='artikal_detalji'), # treba ako nema jquery
-    url(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
-    url(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
 ]

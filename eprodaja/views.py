@@ -9,6 +9,8 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
+from django.core.mail import EmailMultiAlternatives
+from django.http import HttpResponseForbidden
 from .forms import UserLoginForm, UserRegisterForm, DetaljiForm
 from . models import Poruke, Detalji_korisnika, Korpa, Artikal, Kategorija, Podkategorija, Brend, Entry, Tip, Slika, Pretraga
 from django.http import JsonResponse
@@ -143,17 +145,24 @@ def create_modal(request):
 
 
 mail_registracija = """
-Poštovani {username},
+<html>
+<body>
+<h3>Poštovani {username},<h3>
 
-Vaš nalog na sajtu www.nsmobilplus.com je kreiran,
-možete krenuti u sigurnu kupovinu.
+<p>Vaš nalog na sajtu <a href="http://www.nsmobilplus.com">www.nsmobilplus.com</a> je kreiran, možete krenuti u sigurnu kupovinu.</p>
+<br>
+<p>Vaše podatke možete ažurirati u sekciji <a href="http://www.nsmobilplus.com/nalog/{user_id}/">Moj nalog</a>.</p>
 
+<hr>
 
-Srdačno,
+<p>Srdačno,</p>
 
-vaš NSMOBILPLUS
+<p>vaš N&S MOBIL PLUS</p>
 
-Jevrejska 19, 21000 Novi Sad
+<p>Jevrejska 19, 21000 Novi Sad</p>
+
+</body>
+</html>
 """
 
 
@@ -226,8 +235,9 @@ def login_user(request):
                 if user is not None:
                     if user.is_active:
                         login(request, user)
-                        # email = EmailMessage('NSMOBILPLUS | Novi nalog', mail_registracija.format(username=user.username), to=[user.email])
-                        # email.send()
+                        email = EmailMultiAlternatives('N&S MOBIL PLUS | Novi nalog', to=[user.email])
+                        email.attach_alternative(mail_registracija.format(username=user.username, user_id=user.id), "text/html")
+                        email.send()
                         messages.success(request, '{username}, vaš nalog je uspešno kreiran. Hvala!'.format(username=username))
                         return HttpResponseRedirect('/')
     return render(request, 'eprodaja/login.html', {
@@ -271,9 +281,16 @@ def kontakt(request):
         return HttpResponseRedirect(reverse('eprodaja:kontakt'))
     return render(request, 'eprodaja/contact-us.html', {'user': user, 'proizvoda_u_korpi': proizvoda_u_korpi})
 
+def onama(request):
+    return render(request, 'eprodaja/onama.html')
+
 
 def nalog(request, user_id):
     user = User.objects.get(pk=user_id)
+    if request.user.is_anonymous():
+        return HttpResponseForbidden('<h1><center>Morate biti ulogovani.. <a style="text-decoration: none; color: blue;" href="http://www.nsmobilplus.com/logovanje/">Uloguj se</a></center></h1>')
+    if not user == request.user:
+        return HttpResponseForbidden('<h1><center>Možete pristupiti samo svojim podacima.. <a style="text-decoration: none; color: blue;" href="http://www.nsmobilplus.com">Početna</a></center></h1>')
     detalji_korisnika = Detalji_korisnika.objects.get(korisnik=user)
     korpe = Korpa.objects.filter(user=user, potvrdjena=True).order_by('-datum')
     proizvoda_u_korpi = 0
@@ -299,6 +316,8 @@ def nalog(request, user_id):
 
 def korpa(request, user_id):
     user = User.objects.get(pk=user_id)
+    if not user == request.user:
+        return HttpResponseForbidden('<h1><center>Možete pristupiti samo svojim podacima.. <a style="text-decoration: none; color: blue;" href="http://www.nsmobilplus.com">Početna</a></center></h1>')
     if request.method == 'POST':
         izmena_na_unosu = False
         if 'unos' in request.POST:
@@ -352,12 +371,48 @@ def korpa(request, user_id):
 
 def korpa_detalji(request, korpa_id):
     korpa = Korpa.objects.get(pk=korpa_id)
+    if not korpa.user == request.user:
+        return HttpResponseForbidden('<h1><center>Možete pristupiti samo svojim podacima.. <a style="text-decoration: none; color: blue;" href="http://www.nsmobilplus.com">Početna</a></center></h1>')
     unosi = korpa.entry_set.all()
     return render(request, 'eprodaja/korpa_detalji.html', {'korpa': korpa, 'unosi': unosi})
 
 
+mail_korpa = """
+<html>
+<body>
+<h3>Poštovani {username},<h3>
+
+<p>Hvala na kupovini!</p>
+<br>
+{sadrzaj_korpe}
+
+<hr>
+<p>Detalje o vašim porudžbinama možete videti u sekciji <a href="http://www.nsmobilplus.com/nalog/{user_id}/">Moj nalog</a>.</p>
+
+<hr>
+
+<p>Srdačno,</p>
+
+<p>vaš N&S MOBIL PLUS</p>
+
+<p>Jevrejska 19, 21000 Novi Sad</p>
+<p><a href="http://www.nsmobilplus.com">www.nsmobilplus.com</a></p>
+</body>
+</html>
+"""
+
+# sadrzaj korpe u mail-u
+def create_sadrzaj(korpa):
+    string = '<p>Vaši artikli u ovoj kupovini:</p><table border="1"><thead><tr><td>Artikal</td><td>Količina</td><td>Cena</td></tr></thead><tbody>'
+    for unos in korpa.entry_set.all():
+        string += "<tr><td>{artikal}</td><td>{kolicina}</td><td>{cena}</td></tr>".format(artikal=unos.artikal.opis, kolicina=unos.quantity, cena=unos.ukupno)
+    string += "<tr><td>Ukupno:</td><td></td><td>{ukupno}</td></tr></tbody></table>".format(ukupno=korpa.ukupno)
+    return string
+
 def potvrdi_korpu(request, korpa_id):
     korpa = Korpa.objects.get(pk=korpa_id)
+    if not korpa.user == request.user:
+        return HttpResponseForbidden('<h1><center>Možete pristupiti samo svojim podacima.. <a style="text-decoration: none; color: blue;" href="http://www.nsmobilplus.com">Početna</a></center></h1>')
     error = False
     if korpa.user.detalji_korisnika.adresa == "":
         messages.error(request, 'Molim vas unesite ispravne podatke "Ulica i broj".')
@@ -380,6 +435,10 @@ def potvrdi_korpu(request, korpa_id):
         korpa.napomena = napomena
         korpa.save()
         messages.success(request, 'Hvala na kupovini! Detalje o vašim porudžbinama možete videti u sekciji Moj nalog.')
+        email = EmailMultiAlternatives('N&S MOBIL PLUS | Kupovina', to=[korpa.user.email])
+        sadrzaj = create_sadrzaj(korpa)
+        email.attach_alternative(mail_korpa.format(username=korpa.user.username, user_id=korpa.user.id, sadrzaj_korpe=sadrzaj), "text/html")
+        email.send()
         return HttpResponseRedirect("/")
 
 
