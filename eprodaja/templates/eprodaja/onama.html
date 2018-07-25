@@ -1,0 +1,33 @@
+{% extends 'eprodaja/base.html' %}
+{% block title %}O nama{% endblock %}
+{% block content %}
+{% load staticfiles %}
+	
+	<section>
+		<div class="container">
+			<br>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="blog-post-area">
+						<h2 class="title text-center">O nama</h2>
+						<div class="single-blog-post">
+							<h2 id="h3_inline">N&S mobil plus &nbsp;</h2>
+							<h4 id="h3_inline">se prvenstveno bavi servisom i prodajom opreme za mobilne telefone.</h4>
+							<h4>Od osnivanja 2006 godine ostvarujemo uspešnu saradnju na obostrano zadovoljstvo sa sve većim brojem klijenata.</h4>
+							<h4>Rado ćemo vas ugostiti i upoznati sa našom ponudom u našem prodajnom prostoru u Novom Sadu u ulici Jevrejska 19.</h4>
+							<br>
+							<h4>Ukoliko nemate vremena da nas posetite na pravom ste mestu!!!</h4>
+							<h4>Naš webShop vam nudi celokupan asortiman dodatne opreme za sve brendove mobilnih telefona.</h4>
+							<hr>
+							<h4>Profesionalni tim servisera će odgovoriti na svako vaše pitanje koje nam postavite putem <a href="{% url 'eprodaja:kontakt' %}"> ove forme.</a></h4>
+						</div>
+						<br>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+{% endblock %}
