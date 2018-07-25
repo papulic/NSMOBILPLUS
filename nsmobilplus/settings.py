@@ -113,9 +113,10 @@ AUTHENTICATION_BACKENDS = (
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'papulic@gmail.com'
-EMAIL_HOST_PASSWORD = 'stefan15'
+EMAIL_HOST_USER = 'nsmobilplus.webshop@gmail.com'
+EMAIL_HOST_PASSWORD = 'djuro007'
 EMAIL_PORT = 587
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
