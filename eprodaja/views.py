@@ -20,17 +20,11 @@ import datetime
 
 def index(request):
     user = None
-    artikli = Artikal.objects.filter(na_stanju=True).order_by('kategorija')
-    artikli_na_akciji = Artikal.objects.filter(na_akciji=True)
-    artikli_na_akciji_ids = artikli_na_akciji.values_list("id", flat=True)
+    artikli_na_akciji = Artikal.objects.filter(na_akciji=True, na_stanju=True)
     sve_kategorije = Kategorija.objects.all()
     tipovi = Tip.objects.all()
     brendovi = Brend.objects.all()
-    # try:
-    #     random_artikli = [artikli[i] for i in random.sample(range(1, len(artikli)), 15)]
-    # except ValueError:
-    #     random_artikli = [artikli[i] for i in random.sample(range(1, len(artikli)), len(artikli) - 1)]
-    random_artikli = Artikal.objects.filter(na_stanju=True).exclude(pk__in=list(artikli_na_akciji_ids)).order_by('-broj_pregleda')[:15]
+    random_artikli = Artikal.objects.filter(na_stanju=True, na_akciji=False).order_by('-broj_pregleda')[:15]
 
     if request.user.is_authenticated():
         user = request.user
@@ -87,7 +81,7 @@ def filter(request):
     artikli_za_filter = request.GET.get('artikli_za_filter', None)
     artikli_za_filter = artikli_za_filter.split("_")
     kategorija_id = artikli_za_filter[0].split("kategorija")[1]
-    artikli = Artikal.objects.filter(kategorija_id=kategorija_id)
+    artikli = Artikal.objects.filter(kategorija_id=kategorija_id, na_stanju=True)
     if len(artikli_za_filter) > 1:
         for i in artikli_za_filter:
             if 'podkategorija' in i:
@@ -120,7 +114,7 @@ def pretraga(request):
             nova_pretraga.pretraga = pretraga
             nova_pretraga.save()
     if len(splited) > 0:
-        artikli = Artikal.objects.filter(opis_za_filter__icontains=splited[0])
+        artikli = Artikal.objects.filter(opis_za_filter__icontains=splited[0], na_stanju=True)
         if len(splited) > 1:
             for pos, i in enumerate(splited):
                 if pos > 0:
@@ -235,9 +229,16 @@ def login_user(request):
                 if user is not None:
                     if user.is_active:
                         login(request, user)
-                        email = EmailMultiAlternatives('N&S MOBIL PLUS | Novi nalog', to=[user.email])
-                        email.attach_alternative(mail_registracija.format(username=user.username, user_id=user.id), "text/html")
-                        email.send()
+                        try:
+                            email = EmailMultiAlternatives('N&S MOBIL PLUS | Novi nalog', to=[user.email])
+                            email.attach_alternative(mail_registracija.format(username=user.username, user_id=user.id), "text/html")
+                            email.send()
+                        except Exception as e:
+                            nova_poruka = Poruke()
+                            nova_poruka.user = user
+                            nova_poruka.tema = "NEUSPESAN E-MAIL PRILIKOM REGISTRACIJE"
+                            nova_poruka.poruka = "EXCEPTION: {e}".format(e=e)
+                            nova_poruka.save()
                         messages.success(request, '{username}, vaš nalog je uspešno kreiran. Hvala!'.format(username=username))
                         return HttpResponseRedirect('/')
     return render(request, 'eprodaja/login.html', {
@@ -435,10 +436,17 @@ def potvrdi_korpu(request, korpa_id):
         korpa.napomena = napomena
         korpa.save()
         messages.success(request, 'Hvala na kupovini! Detalje o vašim porudžbinama možete videti u sekciji Moj nalog.')
-        email = EmailMultiAlternatives('N&S MOBIL PLUS | Kupovina', to=[korpa.user.email])
-        sadrzaj = create_sadrzaj(korpa)
-        email.attach_alternative(mail_korpa.format(username=korpa.user.username, user_id=korpa.user.id, sadrzaj_korpe=sadrzaj), "text/html")
-        email.send()
+        try:
+            email = EmailMultiAlternatives('N&S MOBIL PLUS | Kupovina', to=[korpa.user.email])
+            sadrzaj = create_sadrzaj(korpa)
+            email.attach_alternative(mail_korpa.format(username=korpa.user.username, user_id=korpa.user.id, sadrzaj_korpe=sadrzaj), "text/html")
+            email.send()
+        except Exception as e:
+            nova_poruka = Poruke()
+            nova_poruka.user = user
+            nova_poruka.tema = "NEUSPESAN E-MAIL PRILIKOM POTVRDJIVANJA KORPE"
+            nova_poruka.poruka = "EXCEPTION: {e}".format(e=e)
+            nova_poruka.save()
         return HttpResponseRedirect("/")
 
 
