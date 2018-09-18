@@ -1,10 +1,12 @@
 # NSMOBILPLUS
 
-proizvodi slike 180x250 za index
+proizvodi slike 180x180 za index
 
-default slika 180 x 250
+default slika 180 x 180
 
-velika za detail 360x500
+velika za detail 360x360
+
+mala za detail 60x60
 _____________________________________________________________________________________________
 
 
@@ -35,7 +37,7 @@ stakla-glass za ekran: podkategorija zakrivljena, obicna: podkategorija brendovi
 
 umesto slova ns mobilplus  ->  logo  --  ok
 
-zoho mail, mozda je dovoljno !!
+zoho mail, mozda je dovoljno !! -- nije!!!
 
 Napomena: ... za svaku korpu! iznad dugmeta kupi.
 
