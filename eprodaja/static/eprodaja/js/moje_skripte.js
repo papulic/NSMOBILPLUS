@@ -24,11 +24,11 @@ $(document).ready(function () {
 										  <p>Artikal ID: #'+data[0][0].id+'</p> \
 									  </div> \
 									  <div class="modal-body"> \
-										<img width="360" height="500" class="velika_slika glavna_slika" src="/media/' + data[0][0].slika + '" alt="" /> \
+										<img width="360" height="360" class="velika_slika glavna_slika" src="/media/' + data[0][0].slika + '" alt="" /> \
 										  <div class="image-grid"> \
-											  <a class="mala_slika image" href="/media/' + data[0][0].slika + '"><img width="60" height="83" src="/media/' + data[0][0].slika + '" alt=""></a>';
+											  <a class="mala_slika image" href="/media/' + data[0][0].slika + '"><img width="60" height="60" src="/media/' + data[0][0].slika + '" alt=""></a>';
 												for (j = 0; j < data[1].length; j++){
-													var imageLine = '<a class="mala_slika image" data-id="data[1][j].id" href="/media/' + data[1][j].slika + '"><img width="60" height="83" src="/media/' + data[1][j].slika + '" alt=""></a>';
+													var imageLine = '<a class="mala_slika image" data-id="data[1][j].id" href="/media/' + data[1][j].slika + '"><img width="60" height="60" src="/media/' + data[1][j].slika + '" alt=""></a>';
 												  	modal_line = modal_line + imageLine;
 												}
 				lineRest = '							</div> \
