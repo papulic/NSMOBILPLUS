@@ -16,9 +16,12 @@ from . models import Poruke, Detalji_korisnika, Korpa, Artikal, Kategorija, Podk
 from django.http import JsonResponse
 # import random
 import datetime
+from nsmobilplus.settings import UNDER_CONSTRUCTION
 
 
 def index(request):
+    if UNDER_CONSTRUCTION:
+        return HttpResponse('<br><br><center><h1>Vraćamo se ubrzo!</h1><img src="/static/eprodaja/images/home/NSmobilPlusLogo.jpg" /></center>')
     user = None
     artikli_na_akciji = Artikal.objects.filter(na_akciji=True, na_stanju=True)
     sve_kategorije = Kategorija.objects.all()
