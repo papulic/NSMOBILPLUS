@@ -24,7 +24,7 @@ SECRET_KEY = 'ck2vo@9c8x$jr%tm58llz_$mgkus_ut3b9m=q98@v!u35-2rwg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-UNDER_CONSTRUCTION = True
+UNDER_CONSTRUCTION = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -108,9 +108,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = (
-    'nsmobilplus.backends.EmailBackend',
-)
+# AUTHENTICATION_BACKENDS = (
+#     'nsmobilplus.backends.EmailBackend',
+# )
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
