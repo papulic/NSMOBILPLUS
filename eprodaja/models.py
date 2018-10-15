@@ -63,6 +63,7 @@ class Podkategorija(models.Model):
 
 
 class Artikal(models.Model):
+    nasa_sifra = models.CharField(max_length=10)
     kategorija = models.ForeignKey(Kategorija, on_delete=models.CASCADE, related_name='artikli')
     podkategorija = models.ForeignKey(Podkategorija, on_delete=models.CASCADE, null=True, blank=True, related_name='artikli')
     tip = models.ForeignKey(Tip, on_delete=models.CASCADE, null=True, blank=True, related_name='artikli')
@@ -76,7 +77,7 @@ class Artikal(models.Model):
     broj_pregleda = models.IntegerField(default=0)
 
     def __unicode__(self):
-        return "id: {id} - kat: {kategorija} - pod.kat: {podkategorija} - tip: {tip} - brend: {brend} - opis: {opis}".format(id=str(self.id), kategorija=self.kategorija, podkategorija=self.podkategorija, tip=self.tip, brend=self.brend, opis=self.opis)
+        return "sifra: {nasa_sifra} - kat: {kategorija} - pod.kat: {podkategorija} - tip: {tip} - brend: {brend} - opis: {opis}".format(nasa_sifra=self.nasa_sifra, kategorija=self.kategorija, podkategorija=self.podkategorija, tip=self.tip, brend=self.brend, opis=self.opis)
 
     class Meta:
         verbose_name_plural = "Artikli"

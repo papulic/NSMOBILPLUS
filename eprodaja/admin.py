@@ -33,7 +33,7 @@ class UserAdmin(AuthUserAdmin):
 
 
 class ArtikalModelAdmin(admin.ModelAdmin):
-    list_display = ["kategorija", "podkategorija", "tip", "brend", "opis", "opis_za_filter", "cena", "na_stanju", "na_akciji"]
+    list_display = ["kategorija", "podkategorija", "tip", "brend", "nasa_sifra", "opis", "opis_za_filter", "cena", "na_stanju", "na_akciji"]
     list_filter = ["kategorija__kategorija", "na_stanju", "na_akciji"]
     list_editable = ["na_stanju", "na_akciji", "cena"]
     inlines = [ArtikalSlikaInline, ]
