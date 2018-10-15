@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 
 class UserLoginForm(forms.Form):
-    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Email Adresa ili korisnicko ime', 'title': ' ', 'id': 'username_login'}), label='')
+    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Korisnicko ime', 'title': ' ', 'id': 'username_login'}), label='')
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Lozinka', 'title': ' ', 'id': 'password_login', 'autocomplete': 'off'}), label='')
 
 class UserRegisterForm(forms.Form):
