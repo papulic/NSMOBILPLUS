@@ -20,9 +20,11 @@ from nsmobilplus.settings import UNDER_CONSTRUCTION
 
 
 def index(request):
-    type = request.META['HTTP_USER_AGENT']
+    device_type = request.META['HTTP_USER_AGENT']
     if UNDER_CONSTRUCTION:
-        return HttpResponse('<br><br><center><h1>Vraćamo se uskoro!</h1><img src="/static/eprodaja/images/home/NSmobilPlusLogo.jpg" /><br><p>{type}<p></center>'.format(type=type))
+        return render(request, 'eprodaja/under_construction.html', {
+            'device_type': device_type
+        })
     user = None
     artikli_na_akciji = Artikal.objects.filter(na_akciji=True, na_stanju=True)
     sve_kategorije = Kategorija.objects.all()
@@ -48,7 +50,7 @@ def index(request):
             'tipovi': tipovi,
             'brendovi': brendovi,
             'random_artikli': random_artikli,
-            'type': type
+            'device_type': device_type
         })
 
 
