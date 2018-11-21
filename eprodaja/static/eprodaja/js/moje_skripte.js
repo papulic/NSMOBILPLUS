@@ -97,7 +97,7 @@ $(document).ready(function () {
 				if (data.length > 0) {
 					$("#filter_artikli").css('paddingBottom', '0px');
 					for (i = 0; i < data.length; i++){
-						var line = '<div class="col-sm-3 col-xs-6"> \
+						var line = '<div class="col-sm-3"> \
 									<div class="product-image-wrapper"> \
 										<div class="single-products"> \
 											<div class="productinfo text-center"> \
@@ -141,7 +141,7 @@ $(document).ready(function () {
 				$("#filter_artikli").html("");
 				if (data.length > 0) {
 					for (i = 0; i < data.length; i++){
-						var line = '<div class="col-sm-3 col-xs-6"> \
+						var line = '<div class="col-sm-3"> \
 									<div class="product-image-wrapper"> \
 										<div class="single-products"> \
 											<div class="productinfo text-center"> \
