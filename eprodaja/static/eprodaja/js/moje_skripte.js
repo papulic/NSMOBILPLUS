@@ -4,7 +4,7 @@ $(document).ready(function () {
 		$('.modal').modal('show');
 	});
 	// napravi modal i prikazi
-	jQuery(document.body).on('click', '.artikal_detail', function(e) {
+	jQuery(document.body).on('click touch', '.artikal_detail', function(e) {
 		e.preventDefault();
 		$("#modal-artikal").html("");
 		var artikal_id = $(this).attr('id');
@@ -48,14 +48,14 @@ $(document).ready(function () {
 		$("#modal-artikal").modal('show');
 	});
 	// male slike
-	jQuery(document.body).on('click', '.mala_slika', function(e) {
+	jQuery(document.body).on('click touch', '.mala_slika', function(e) {
 		e.preventDefault();
 		var nova_putanja = $(this).children('img').attr('src');
 		var $imageContainer = $(this).parent().prev('.velika_slika');
 		$imageContainer.attr('src', nova_putanja);
 	});
 	// dodaj proizvod u korpu
-    jQuery(document.body).on('click', '.u_korpu', function() {
+    jQuery(document.body).on('click touch', '.u_korpu', function() {
 		var artikal_id = this.id;
 		$.ajax({
 			context: this,
@@ -72,7 +72,7 @@ $(document).ready(function () {
 						'scrollTop' : $("#korpa").position().top
 					});
 
-					var itemImg = $(this).parent().find('img').eq(0);
+					var itemImg = $(this).parent().parent().find('img').eq(0);
 					flyToElement($(itemImg), $('#korpa'));
 					$("#korpa").html(data.proizvoda_u_korpi);
 					$(this).hide();
@@ -83,7 +83,7 @@ $(document).ready(function () {
 	$('.pretraga').on("contextmenu",function(){
        return false;
     });
-    $('.pretraga').on("click",function(){
+    $('.pretraga').on("click touch",function(){
 		var artikli_za_filter =  $(this).data("id");
 		$.ajax({
 			context: this,
@@ -97,21 +97,20 @@ $(document).ready(function () {
 				if (data.length > 0) {
 					$("#filter_artikli").css('paddingBottom', '0px');
 					for (i = 0; i < data.length; i++){
-						var line = '<div class="col-sm-3"> \
-									<div class="product-image-wrapper"> \
-										<div class="single-products"> \
-											<div class="productinfo text-center"> \
-												<a class="artikal_detail" href="/media/' + data[i].slika + '" id="'+data[i].id+'"> \
-												<img src="/media/' + data[i].slika + '" alt="" /> \
-												</a> \
-												<h2>' + data[i].cena + 'din</h2> \
-												<p>' + data[i].opis + '</p> \
-												<button id="' + data[i].id + '" class="u_korpu btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button> \
-											</div> \
-										</div> \
-									</div> \
-								</div>';
+						var line = '<div class="col-md-3 col-sm-6 col-xs-6"> \
+                                        <div class="product-image-wrapper"> \
+                                            <div class="productinfo text-center"> \
+                                                <a class="artikal_detail" href="/media/' + data[i].slika + '" id="'+data[i].id+'"> \
+                                                <img src="/media/' + data[i].slika + '" alt="" /> \
+                                                </a> \
+                                                <h2>' + data[i].cena.toFixed(1) + 'din</h2> \
+                                                    <p>' + data[i].opis + '</p> \
+                                            </div> \
+                                            <button id="' + data[i].id + '" class="u_korpu btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button> \
+                                        </div> \
+                                    </div>';
 						$("#filter_artikli").append(line);
+						//console.log(data[i].cena.toFixed(2));
 					}
 				}
 				else{
@@ -127,7 +126,7 @@ $(document).ready(function () {
 		e.preventDefault();
 		$("#pretrazi_artikle").click();
 	});
-    $('#pretrazi_artikle').on("click",function(){
+    $('#pretrazi_artikle').on("click touch",function(){
     	var pretraga = $('input[name=pretraga_svih_artikala]').val();
     	$('input[name=pretraga_svih_artikala]').val("");
     	$.ajax({
@@ -141,20 +140,18 @@ $(document).ready(function () {
 				$("#filter_artikli").html("");
 				if (data.length > 0) {
 					for (i = 0; i < data.length; i++){
-						var line = '<div class="col-sm-3"> \
-									<div class="product-image-wrapper"> \
-										<div class="single-products"> \
-											<div class="productinfo text-center"> \
-												<a class="artikal_detail" href="/media/' + data[i].slika + '" id="'+data[i].id+'"> \
-												<img src="/media/' + data[i].slika + '" alt="" /> \
-												</a> \
-												<h2>' + data[i].cena + 'din</h2> \
-												<p>' + data[i].opis + '</p> \
-												<button id="' + data[i].id + '" class="u_korpu btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button> \
-											</div> \
-										</div> \
-									</div> \
-								</div>';
+						var line = '<div class="col-md-3 col-sm-6 col-xs-6"> \
+                                        <div class="product-image-wrapper"> \
+                                            <div class="productinfo text-center"> \
+                                                <a class="artikal_detail" href="/media/' + data[i].slika + '" id="'+data[i].id+'"> \
+                                                <img src="/media/' + data[i].slika + '" alt="" /> \
+                                                </a> \
+                                                <h2>' + data[i].cena.toFixed(1) + 'din</h2> \
+                                                    <p>' + data[i].opis + '</p> \
+                                            </div> \
+                                            <button id="' + data[i].id + '" class="u_korpu btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button> \
+                                        </div> \
+                                    </div>';
 						$("#filter_artikli").append(line);
 					}
 
@@ -167,7 +164,48 @@ $(document).ready(function () {
 			}
         });
     });
+    //
+    $('#button_xs').on("click touch",function(){
+    $("#mySidenav").removeClass("hidden-xs");
+    $("#mySidenav").removeClass("hidden-sm");
+    $('html, body').animate({scrollTop: $('#accordian').offset().top -100 }, 'slow');
+    });
+    moveScroller();
+
+//    $(window).scroll(function(e){
+//      var $el = $('.fixedElement');
+//      var isPositionFixed = ($el.css('position') == 'fixed');
+//      if ($(this).scrollTop() > 1200 && !isPositionFixed){
+//        $el.css({'position': 'fixed', 'top': '0px'});
+//      }
+//      if ($(this).scrollTop() < 1200 && isPositionFixed){
+//        $el.css({'position': 'static', 'top': '0px'});
+//      }
+//    });
 });
 function goBack() {
     window.history.back();
+}
+
+function moveScroller() {
+    var $anchor = $("#scroller-anchor");
+    var $scroller = $('#button_xs');
+
+    var move = function() {
+        var st = $(window).scrollTop();
+        var ot = $anchor.offset().top;
+        if(st > ot) {
+            $scroller.css({
+                position: "fixed",
+                top: "0"
+            });
+        } else {
+            $scroller.css({
+                position: "relative",
+
+            });
+        }
+    };
+    $(window).scroll(move);
+    move();
 }
