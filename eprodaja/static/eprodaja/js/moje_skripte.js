@@ -173,42 +173,18 @@ $(document).ready(function () {
     });
     moveScroller();
 
-//    $('.change-color').on("click touch",function(){
-//        var back_col = $(this).css("background-color");
-//        var elem_id = $(this).attr("href");
-//        var isExpanded = $(elem_id).hasClass('collapse');
-//        if (isExpanded == false){
-//            $(this).animate({
-//            color: "rgb(105, 103, 99)",
-//            backgroundColor: "rgba( 0, 0, 0, 0 )"
-//            });
-//        }
-//        else{
-//            $(this).animate({
-//                color: "white",
-//                backgroundColor: "rgb( 254, 152, 15 )"
-//            });
-//        };
-//        $('.change-color').not(this).each(function(){
-//            var back_col = $(this).css("background-color");
-//            var elem_id = $(this).attr("href");
-//            var isExpanded = $(elem_id).hasClass('collapse');
-//            if (isExpanded == true){
-//                $(this).animate({
-//                color: "rgb(105, 103, 99)",
-//                backgroundColor: "rgba( 0, 0, 0, 0 )"
-//                });
-//            }
-//            else{
-//                $(this).animate({
-//                    color: "white",
-//                    backgroundColor: "rgb( 254, 152, 15 )"
-//                });
-//            };
-//
-//        });
-//    });
 });
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+    document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main").style.marginLeft= "0";
+    document.body.style.backgroundColor = "white";
+}
 function goBack() {
     window.history.back();
 }
