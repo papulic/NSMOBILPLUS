@@ -167,24 +167,22 @@ $(document).ready(function () {
     });
     //
     $('#button_xs').on("click touch",function(){
-    $("#mySidenav").removeClass("hidden-xs");
-    $("#mySidenav").removeClass("hidden-sm");
-    $('html, body').animate({scrollTop: $('#accordian').offset().top -100 }, 'slow');
+        $('html, body').animate({scrollTop: $('#accordian').offset().top -100 }, 'slow');
+        openNav();
     });
     moveScroller();
+
+    $('.sidenav').on( "swipeleft", closeNav );
 
 });
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
-    document.getElementById("main").style.marginLeft = "250px";
-    document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
 }
 
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
-    document.getElementById("main").style.marginLeft= "0";
-    document.body.style.backgroundColor = "white";
 }
+
 function goBack() {
     window.history.back();
 }
