@@ -97,8 +97,10 @@
 							</form>
 						</div>
 						<div id="scroller-anchor"></div>
-						<button class="btn btn-default visible-xs visible-sm fixedElement" id="button_xs"><a href="#accordian">Filter</a></button>
-						<div class="hidden-xs hidden-sm" id="mySidenav">
+
+						<button class="btn btn-default fixedElement" id="button_xs" onclick="openNav()"><a href="#accordian">Filter</a></button>
+						<div class="sidenav" id="mySidenav">
+						<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
                         <h2>KATEGORIJE</h2>
                         <div class="panel-group category-products" id="accordian"><!--category-productsr-->
 
