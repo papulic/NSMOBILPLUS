@@ -2427,6 +2427,10 @@ h2.title {
   margin-bottom: 20px;
 }
 
+.contact-form .form-group a{
+  color: white;
+}
+
 #contact-page
 .form-control::-moz-placeholder {
   color: #8D8D8D;
