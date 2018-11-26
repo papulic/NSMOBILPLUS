@@ -110,6 +110,7 @@ def filter(request):
 def pretraga(request):
     pretraga = request.GET.get('pretraga', None)
     splited = pretraga.split()
+    artikli = None
     if len(pretraga) > 5:
         if Pretraga.objects.filter(pretraga=pretraga).exists():
             pass
