@@ -702,9 +702,9 @@ h2.title:before{
 }
 
 .category-products .panel-default .panel-heading .panel-title a {
-  color: #696763;
+  color: #000000;
   font-family: 'Roboto', sans-serif;
-  font-size: 14px;
+  font-size: 18px;
   text-decoration: none;
   text-transform: uppercase;
 }
@@ -2544,7 +2544,6 @@ h2.title {
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
-    opacity: 0.9;
 }
 
 .sidenav a {
