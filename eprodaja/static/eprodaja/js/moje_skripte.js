@@ -167,7 +167,7 @@ $(document).ready(function () {
     });
     //
     $('#button_xs').on("click touch",function(){
-        $('html, body').animate({scrollTop: $('#accordian').offset().top -100 }, 'slow');
+        $('html, body').animate({scrollTop: $('#svi_artikli').offset().top -100 }, 'slow');
         openNav();
     });
     moveScroller();
