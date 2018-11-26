@@ -136,14 +136,12 @@
 												<a class="pretraga" data-id="kategorija{{ kategorija.id }}_podkategorija{{ podkategorija.id }}" href="javascript:void(0)"><b>{{ podkategorija.podkategorija }}</b></a>
 												{% endif %}
 											</li>
-											<hr>
 											<!--ako ima tip-->
 											{% if kategorija.tipovi %}
 											<div id="{{ kategorija.id }}{{ podkategorija.id }}" class="collapse">
 												<ul>
 												{% for tip in tipovi %}
 													<li><a class="pretraga" data-id="kategorija{{ kategorija.id }}_podkategorija{{ podkategorija.id }}_tip{{ tip.id }}" href="javascript:void(0)">{{ tip.tip }}</a></li>
-													<hr>
 												{% endfor %}
 												</ul>
 											</div>
@@ -154,7 +152,6 @@
 												<ul>
 												{% for brend in brendovi %}
 													<li><a class="pretraga" data-id="kategorija{{ kategorija.id }}_podkategorija{{ podkategorija.id }}_brend{{ brend.id }}" href="javascript:void(0)">{{ brend.brend }}</a></li>
-													<hr>
 												{% endfor %}
 												</ul>
 											</div>
@@ -172,7 +169,6 @@
 											<li>
 												<a class="pretraga" data-id="kategorija{{ kategorija.id }}_brend{{ brend.id }}" href="javascript:void(0)"><b>{{ brend.brend }}</b></a>
 											</li>
-											<hr>
 											{% endfor %}
 										</ul>
 									</div>
@@ -186,7 +182,6 @@
 											<li>
 												<a class="pretraga" data-id="kategorija{{ kategorija.id }}_tip{{ tip.id }}" href="javascript:void(0)"><b>{{ tip.tip }}</b></a>
 											</li>
-											<hr>
 											{% endfor %}
 										</ul>
 									</div>
