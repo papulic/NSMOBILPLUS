@@ -120,6 +120,7 @@ $(document).ready(function () {
 				}
 			}
         });
+        $(this).effect('highlight',{color: '#ffaa02'},1500);
     });
 
 	$('#main-contact-form-search').submit(function (e) {
@@ -172,15 +173,40 @@ $(document).ready(function () {
     });
     moveScroller();
 
-//    $(window).scroll(function(e){
-//      var $el = $('.fixedElement');
-//      var isPositionFixed = ($el.css('position') == 'fixed');
-//      if ($(this).scrollTop() > 1200 && !isPositionFixed){
-//        $el.css({'position': 'fixed', 'top': '0px'});
-//      }
-//      if ($(this).scrollTop() < 1200 && isPositionFixed){
-//        $el.css({'position': 'static', 'top': '0px'});
-//      }
+//    $('.change-color').on("click touch",function(){
+//        var back_col = $(this).css("background-color");
+//        var elem_id = $(this).attr("href");
+//        var isExpanded = $(elem_id).hasClass('collapse');
+//        if (isExpanded == false){
+//            $(this).animate({
+//            color: "rgb(105, 103, 99)",
+//            backgroundColor: "rgba( 0, 0, 0, 0 )"
+//            });
+//        }
+//        else{
+//            $(this).animate({
+//                color: "white",
+//                backgroundColor: "rgb( 254, 152, 15 )"
+//            });
+//        };
+//        $('.change-color').not(this).each(function(){
+//            var back_col = $(this).css("background-color");
+//            var elem_id = $(this).attr("href");
+//            var isExpanded = $(elem_id).hasClass('collapse');
+//            if (isExpanded == true){
+//                $(this).animate({
+//                color: "rgb(105, 103, 99)",
+//                backgroundColor: "rgba( 0, 0, 0, 0 )"
+//                });
+//            }
+//            else{
+//                $(this).animate({
+//                    color: "white",
+//                    backgroundColor: "rgb( 254, 152, 15 )"
+//                });
+//            };
+//
+//        });
 //    });
 });
 function goBack() {
