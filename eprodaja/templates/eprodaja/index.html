@@ -98,61 +98,61 @@
 						</div>
 						<div id="scroller-anchor"></div>
 
-						<button class="btn btn-default" id="button_xs">Filter</button>
-						<div class="sidenav" id="mySidenav">
-						<div id="button-anchor"></div>
-						<a href="javascript:void(0)" class="closebtn" onclick="closeNav()" id="closebtn">Zatvori filter</a>
-                        <h2>KATEGORIJE</h2>
-                        <div class="panel-group category-products" id="accordian"><!--category-productsr-->
+						<button class="btn btn-default noClose" id="button_xs">Filter</button>
+						<div class="sidenav noClose" id="mySidenav">
+						<div class="noClose" id="button-anchor"></div>
+						<a href="javascript:void(0)" class="closebtn noClose" onclick="closeNav()" id="closebtn">Zatvori filter</a>
+                        <h2 class="noClose">KATEGORIJE</h2>
+                        <div class="panel-group category-products noClose" id="accordian"><!--category-productsr-->
 
                             {% for kategorija in sve_kategorije %}
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title">
+							<div class="panel panel-default noClose">
+								<div class="panel-heading noClose">
+									<h4 class="panel-title noClose">
 										<!--ako ima podkategoriju ili su podkategorija brendovi-->
 										{% if kategorija.podkategorije.all or kategorija.tipovi or kategorija.brendovi %}
-										<a class="pretraga" data-id="kategorija{{ kategorija.id }}" data-toggle="collapse" data-parent="#accordian" href="#{{ kategorija.id }}">
-											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
+										<a class="pretraga noClose" data-id="kategorija{{ kategorija.id }}" data-toggle="collapse" data-parent="#accordian" href="#{{ kategorija.id }}">
+											<span class="badge pull-right noClose"><i class="fa fa-plus noClose"></i></span>
 											{{ kategorija }}
 										</a>
 										{% else %}
-											<a class="pretraga" data-id="kategorija{{ kategorija.id }}" href="javascript:void(0)">{{ kategorija }}</a>
+											<a class="pretraga noClose" data-id="kategorija{{ kategorija.id }}" href="javascript:void(0)">{{ kategorija }}</a>
 										{% endif %}
 									</h4>
 								</div>
 								<!--ako ima podkategorije-->
 								{% if kategorija.podkategorije.all %}
-								<div id="{{ kategorija.id }}" class="panel-collapse collapse">
-									<div class="panel-body">
-										<ul>
+								<div id="{{ kategorija.id }}" class="panel-collapse collapse noClose">
+									<div class="panel-body noClose">
+										<ul class="noClose">
                                             {% for podkategorija in kategorija.podkategorije.all %}
-											<li>
+											<li class="noClose">
 												<!--ako ima tip ili brend-->
 												{% if kategorija.tipovi or kategorija.brendovi  %}
-												<a class="pretraga" data-id="kategorija{{ kategorija.id }}_podkategorija{{ podkategorija.id }}" data-toggle="collapse" href="#{{ kategorija.id }}{{ podkategorija.id }}">
-													<span class="badge pull-right"><i class="fa fa-plus"></i></span>
-													<b>{{ podkategorija.podkategorija }}</b>
+												<a class="pretraga noClose" data-id="kategorija{{ kategorija.id }}_podkategorija{{ podkategorija.id }}" data-toggle="collapse" href="#{{ kategorija.id }}{{ podkategorija.id }}">
+													<span class="badge pull-right noClose"><i class="fa fa-plus noClose"></i></span>
+													<b class="noClose">{{ podkategorija.podkategorija }}</b>
 												</a>
 												{% else %}
-												<a class="pretraga" data-id="kategorija{{ kategorija.id }}_podkategorija{{ podkategorija.id }}" href="javascript:void(0)"><b>{{ podkategorija.podkategorija }}</b></a>
+												<a class="pretraga noClose" data-id="kategorija{{ kategorija.id }}_podkategorija{{ podkategorija.id }}" href="javascript:void(0)"><b>{{ podkategorija.podkategorija }}</b></a>
 												{% endif %}
 											</li>
 											<!--ako ima tip-->
 											{% if kategorija.tipovi %}
-											<div id="{{ kategorija.id }}{{ podkategorija.id }}" class="collapse">
-												<ul>
+											<div id="{{ kategorija.id }}{{ podkategorija.id }}" class="collapse noClose">
+												<ul class="noClose">
 												{% for tip in tipovi %}
-													<li><a class="pretraga" data-id="kategorija{{ kategorija.id }}_podkategorija{{ podkategorija.id }}_tip{{ tip.id }}" href="javascript:void(0)">{{ tip.tip }}</a></li>
+													<li class="noClose"><a class="pretraga noClose" data-id="kategorija{{ kategorija.id }}_podkategorija{{ podkategorija.id }}_tip{{ tip.id }}" href="javascript:void(0)">{{ tip.tip }}</a></li>
 												{% endfor %}
 												</ul>
 											</div>
 											{% endif %}
 											<!--ako ima brend-->
 											{% if kategorija.brendovi %}
-											<div id="{{ kategorija.id }}{{ podkategorija.id }}" class="collapse">
-												<ul>
+											<div id="{{ kategorija.id }}{{ podkategorija.id }}" class="collapse noClose">
+												<ul class="noClose">
 												{% for brend in brendovi %}
-													<li><a class="pretraga" data-id="kategorija{{ kategorija.id }}_podkategorija{{ podkategorija.id }}_brend{{ brend.id }}" href="javascript:void(0)">{{ brend.brend }}</a></li>
+													<li class="noClose"><a class="pretraga noClose" data-id="kategorija{{ kategorija.id }}_podkategorija{{ podkategorija.id }}_brend{{ brend.id }}" href="javascript:void(0)">{{ brend.brend }}</a></li>
 												{% endfor %}
 												</ul>
 											</div>
@@ -163,12 +163,12 @@
 								</div>
 								<!--ako su podkategorija brendovi (NE SME DA IMA PODKATEGORIJU) -->
 								{% elif kategorija.brendovi %}
-								<div id="{{ kategorija.id }}" class="panel-collapse collapse">
-									<div class="panel-body">
-										<ul>
+								<div id="{{ kategorija.id }}" class="panel-collapse collapse noClose">
+									<div class="panel-body noClose">
+										<ul class="noClose">
                                             {% for brend in brendovi %}
-											<li>
-												<a class="pretraga" data-id="kategorija{{ kategorija.id }}_brend{{ brend.id }}" href="javascript:void(0)"><b>{{ brend.brend }}</b></a>
+											<li class="noClose">
+												<a class="pretraga noClose" data-id="kategorija{{ kategorija.id }}_brend{{ brend.id }}" href="javascript:void(0)"><b class="noClose">{{ brend.brend }}</b></a>
 											</li>
 											{% endfor %}
 										</ul>
@@ -176,12 +176,12 @@
 								</div>
 								<!--ako su podkategorija tipovi (NE SME DA IMA PODKATEGORIJU) -->
 								{% elif kategorija.tipovi %}
-								<div id="{{ kategorija.id }}" class="panel-collapse collapse">
-									<div class="panel-body">
-										<ul>
+								<div id="{{ kategorija.id }}" class="panel-collapse collapse noClose">
+									<div class="panel-body noClose">
+										<ul class="noClose">
                                             {% for tip in tipovi %}
-											<li>
-												<a class="pretraga" data-id="kategorija{{ kategorija.id }}_tip{{ tip.id }}" href="javascript:void(0)"><b>{{ tip.tip }}</b></a>
+											<li class="noClose">
+												<a class="pretraga noClose" data-id="kategorija{{ kategorija.id }}_tip{{ tip.id }}" href="javascript:void(0)"><b class="noClose">{{ tip.tip }}</b></a>
 											</li>
 											{% endfor %}
 										</ul>
