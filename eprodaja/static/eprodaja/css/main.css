@@ -855,7 +855,7 @@ h2.title {
   font-size: 14px;
   font-weight: 400;
   color: #696763;
-  word-wrap;
+  word-wrap: break-word;
 }
 
 .productinfo img{
@@ -1552,11 +1552,9 @@ h2.title {
   vertical-align: inherit;
 }
 
-
-#cart_items .cart_info .image {
-  padding-left: 30px;
+#cart_items .cart_info .cart_description {
+  word-wrap: break-word;
 }
-
 
 #cart_items .cart_info .cart_description h4 {
   margin-bottom: 0
@@ -1574,7 +1572,6 @@ h2.title {
   color:#696763
 }
 
-
 #cart_items .cart_info .cart_price p {
   color:#696763;
   font-size: 18px
@@ -1591,52 +1588,29 @@ h2.title {
   font-size: 24px;
 }
 
-.cart_product {
-  display: block;
-  margin: 15px -70px 10px 25px;
+@media screen and (max-width: 768px) {
+    #cart_items .cart_info .cart_menu {
+      font-size: 10px;
+    }
+    #cart_items .cart_info .cart_description h4 a {
+      font-size: 10px;
+    }
+    #cart_items .cart_info .cart_description h4 {
+      font-size: 10px;
+    }
+    #cart_items .cart_info .cart_total_price {
+      font-size: 12px;
+    }
+    .cart_quantity_button input {
+      font-size: 8px;
+
+    }
+    #cart_items .cart_info .cart_description {
+      word-wrap: break-word;
+      max-width:50px;
+      white-space:normal;
+    }
 }
-
-.cart_quantity_button a {
-  background:#F0F0E9;
-  color: #696763;
-  display: inline-block;
-  font-size: 16px;
-  height: 28px;
-  overflow: hidden;
-  text-align: center;
-  width: 35px;
-  float: left;
-}
-
-
-.cart_quantity_input {
-  color: #696763;
-  float: left;
-  font-size: 16px;
-  text-align: center;
-  font-family: 'Roboto',sans-serif;
-
-}
-
-
-.cart_delete  {
-  display: block;
-  margin-right: -12px;
-  overflow: hidden;
-}
-
-
-.cart_delete a {
-  background:#F0F0E9;
-  color: #FFFFFF;
-  padding: 5px 7px;
-  font-size: 16px
-}
-
-.cart_delete a:hover {
-  background:#FE980F
-}
-
 
 .bg h2.title {
   margin-right:0;
@@ -1689,58 +1663,6 @@ h2.title {
   color: #696763;
   font-weight: normal;
   margin-left: 10px;
-}
-
-
-.user_info {
-  display: block;
-  margin-bottom: 15px;
-  margin-top: 20px;
-  overflow: hidden;
-}
-
-.user_info label {
-  color: #696763;
-  display: block;
-  font-size: 15px;
-  font-weight: normal;
-
-}
-
-.user_info .single_field {
-  width: 31%
-}
-
-.user_info .single_field.zip-field input {
-  background: transparent;
-  border: 1px solid#F0F0E9
-}
-
-.user_info > li {
-  float: left;
-  margin-right: 10px
-}
-
-.user_info > li > span {
-}
-
-.user_info input, select, textarea {
-  background: #F0F0E9;
-  border:0;
-  color: #696763;
-  padding: 5px;
-  width: 100%;
-  border-radius: 0;
-  resize: none
-}
-
-.user_info select:focus {
-  border: 0
-}
-
-
-.chose_area .update {
-  margin-left: 40px;
 }
 
 .update, .check_out {
@@ -2543,7 +2465,7 @@ h2.title {
     background-color: #ffff;
     overflow-x: hidden;
     transition: 0.5s;
-    padding-top: 60px;
+    padding-top: 0px;
 }
 
 .sidenav a {
@@ -2555,13 +2477,20 @@ h2.title {
 }
 
 .sidenav a:hover, .offcanvas a:focus{
-    color: #fe980f;
+    color: #000000;
 }
 
 .sidenav .closebtn {
-    position: absolute;
+    position: sticky;
     top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
+    font-size: 14px;
+    z-index: 100;
+    background-color: rgba(254, 152, 15);
+    border-radius: 10px;
+    text-align: center;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.sidenav h2{
+    margin-top: 20px;
 }
