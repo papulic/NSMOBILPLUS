@@ -174,6 +174,22 @@ $(document).ready(function () {
     });
     moveScroller();
 
+//    $('body').click(function(evt){
+//        var navbar = document.getElementById("mySidenav").style.width;
+//        console.log(navbar);
+//        if(!$(evt.target).is('#mySidenav') && !$(evt.target).is('#button_xs')) {
+//            closeNav();
+//        }
+//    });
+    jQuery(document.body).on('click touch', function(e) {
+		var clas = $(e.target)[0].className
+//		console.log(clas);
+        if(!clas.includes("noClose")){
+            closeNav();
+        };
+
+	});
+
 });
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
