@@ -10,11 +10,11 @@
 				<table class="table table-condensed">
 					<thead>
 						<tr class="cart_menu">
-							<td class="description">Artikal</td>
+							<td>Artikal</td>
 							<td>-/+</td>
 							<td>Količina</td>
-							<td class="total">Cena</td>
-							<td class="total">Ukupno</td>
+							<td>Cena</td>
+							<td>Ukupno</td>
 							<td>Ukloni iz korpe</td>
 						</tr>
 					</thead>
@@ -22,7 +22,7 @@
 					{% for unos in unosi %}
 						<tr>
 							<td class="cart_description">
-								<h4>{{ unos.artikal.opis }}</a></h4>
+								<h4><a>{{ unos.artikal.opis }}</a></h4>
 							</td>
 							<td class="cart_quantity">
 								<div class="cart_quantity_button">
@@ -34,7 +34,7 @@
 									</form>
 								</div>
 							</td>
-							<td>
+							<td class="cart_description">
 								<center><h4 class="kolicina">{{ unos.quantity }}</h4></center>
 							</td>
 							<td class="cart_total">
@@ -43,7 +43,7 @@
 							<td class="cart_total">
 								<p class="cart_total_price">{{ unos.ukupno }}</p>
 							</td>
-							<td>
+							<td class="cart_quantity_button">
 								<form action="{% url 'eprodaja:korpa' user.id %}" method="post">
 								{% csrf_token %}
 									<input type="hidden" name="brisi_unos" value="{{ unos.id }}">
@@ -79,23 +79,10 @@
 				<div class="col-sm-6">
 					<h3>Detalji o korpi</h3>
 					<div class="total_area">
-						<ul class="user_info">
-							<li class="single_field">
-								<label>Ukupno proizvoda: </label>
-								<h4>{{ proizvoda_u_korpi }}</h4>
-							</li>
-							<li class="single_field">
-								<label>Ukupna vrednost:</label>
-								<h4>{{ korpa.ukupno }}</h4>
-							</li>
-							<li class="single_field">
-								<label>Besplatna poštarina:</label>
-								{% if korpa.ukupno > 2499 %}
-								<h4>Da</h4>
-								{% else %}
-								<h4>Ne</h4>
-								{% endif %}
-							</li>
+						<ul>
+							<li>Ukupno proizvoda:<span><b>{{ proizvoda_u_korpi }}</b></span></li>
+							<li>Ukupna vrednost:<span><b>{{ korpa.ukupno }}</b></span></li>
+							<li>Besplatna poštarina:<span><b>{% if korpa.ukupno > 2499 %}Da{% else %}Ne{% endif %}</b></span></li>
 						</ul>
 						{% if korpa.ukupno < 2500 %}
 						<p>Da bi ostvarili besplatnu poštarinu korpa mora imati vrednost veću od 2500din</p>
