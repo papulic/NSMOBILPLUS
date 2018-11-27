@@ -130,40 +130,42 @@ $(document).ready(function () {
     $('#pretrazi_artikle').on("click touch",function(){
     	var pretraga = $('input[name=pretraga_svih_artikala]').val();
     	$('input[name=pretraga_svih_artikala]').val("");
-    	$.ajax({
-			context: this,
-			url: '/pretraga/',
-			data: {
-				   'pretraga': pretraga,
-			},
-			dataType: 'json',
-			success: function (data) {
-				$("#filter_artikli").html("");
-				if (data.length > 0) {
-					for (i = 0; i < data.length; i++){
-						var line = '<div class="col-md-3 col-sm-6 col-xs-6"> \
-                                        <div class="product-image-wrapper"> \
-                                            <div class="productinfo text-center"> \
-                                                <a class="artikal_detail" href="/media/' + data[i].slika + '" id="'+data[i].id+'"> \
-                                                <img src="/media/' + data[i].slika + '" alt="" /> \
-                                                </a> \
-                                                <h2>' + data[i].cena.toFixed(1) + 'din</h2> \
-                                                    <p>' + data[i].opis + '</p> \
+    	if (pretraga != ""){
+            $.ajax({
+                context: this,
+                url: '/pretraga/',
+                data: {
+                       'pretraga': pretraga,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $("#filter_artikli").html("");
+                    if (data.length > 0) {
+                        for (i = 0; i < data.length; i++){
+                            var line = '<div class="col-md-3 col-sm-6 col-xs-6"> \
+                                            <div class="product-image-wrapper"> \
+                                                <div class="productinfo text-center"> \
+                                                    <a class="artikal_detail" href="/media/' + data[i].slika + '" id="'+data[i].id+'"> \
+                                                    <img src="/media/' + data[i].slika + '" alt="" /> \
+                                                    </a> \
+                                                    <h2>' + data[i].cena.toFixed(1) + 'din</h2> \
+                                                        <p>' + data[i].opis + '</p> \
+                                                </div> \
+                                                <button id="' + data[i].id + '" class="u_korpu btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button> \
                                             </div> \
-                                            <button id="' + data[i].id + '" class="u_korpu btn btn-default add-to-cart" type="submit" value="U korpu"><i class="fa fa-shopping-cart input_span"></i> U korpu</button> \
-                                        </div> \
-                                    </div>';
-						$("#filter_artikli").append(line);
-					}
+                                        </div>';
+                            $("#filter_artikli").append(line);
+                        }
 
-				}
-				else{
-					$("#filter_artikli").css('paddingBottom', '450px');
-					var line = '<h4 class="title text-center">Trenutno nema proizvoda za traženi kriterijum</h4>';
-					$("#filter_artikli").append(line);
-				}
-			}
-        });
+                    }
+                    else{
+                        $("#filter_artikli").css('paddingBottom', '450px');
+                        var line = '<h4 class="title text-center">Trenutno nema proizvoda za traženi kriterijum</h4>';
+                        $("#filter_artikli").append(line);
+                    }
+                }
+            });
+        };
     });
     //
     $('#button_xs').on("click touch",function(){
@@ -171,8 +173,6 @@ $(document).ready(function () {
         openNav();
     });
     moveScroller();
-
-    $('.sidenav').on( "swipeleft", closeNav );
 
 });
 function openNav() {
