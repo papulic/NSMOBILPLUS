@@ -110,7 +110,6 @@ def filter(request):
 def pretraga(request):
     pretraga = request.GET.get('pretraga', None)
     splited = pretraga.split()
-    artikli = None
     if len(pretraga) > 5:
         if Pretraga.objects.filter(pretraga=pretraga).exists():
             pass
@@ -127,7 +126,6 @@ def pretraga(request):
             for pos, i in enumerate(splited):
                 if pos > 0:
                     artikli = artikli.filter(opis_za_filter__icontains=i)
-    if artikli:
         data = list(artikli.values())
     else:
         data = {}
