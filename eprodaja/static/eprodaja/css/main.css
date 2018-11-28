@@ -559,47 +559,15 @@ ul.sub-menu {
 .carousel-indicators li.active {
 	  background: #FE980F;
 }
-
-.item {
-  padding-left: 100px;
 }
 
-
-.pricing {
-  position: absolute;
-  right: 40%;
-  top: 52%;
-}
-
-.girl {
-  margin-left: 0;
-}
-
-.item h1 {
-  color: #B4B1AB;
-  font-family: abel;
-  font-size: 48px;
-  margin-top: 115px;
-}
-
-.item h1 span {
-	color:#FE980F;
-}
-
-.item h2 {
-  color: #363432;
-  font-family: 'Roboto', sans-serif;
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 22px;
-  margin-top: 10px;
-}
-
-.item  p {
-	color:#363432;
-	font-size:16px;
-	font-weight:300;
-	font-family: 'Roboto', sans-serif;
+@media screen and (max-width: 768px) {
+    .item  p {
+        font-size: 12px;
+    }
+    .item h2 {
+        font-size: 16px;
+    }
 }
 
 .get {
@@ -2494,3 +2462,4 @@ h2.title {
 .sidenav h2{
     margin-top: 20px;
 }
+
