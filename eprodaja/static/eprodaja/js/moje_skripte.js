@@ -1,5 +1,11 @@
 $(document).ready(function () {
     $('#messagemodal').modal('show');
+    if($("#form").length == 0) {
+      //it doesn't exist
+    }
+    else{
+        $('html, body').animate({scrollTop: $('#form').offset().top -20 }, 'slow');
+        };
 	$("#kupi").click(function() {
 		$('.modal').modal('show');
 	});
@@ -167,23 +173,20 @@ $(document).ready(function () {
             });
         };
     });
-    //
+
     $('#button_xs').on("click touch",function(){
         $('html, body').animate({scrollTop: $('#svi_artikli').offset().top -100 }, 'slow');
         openNav();
     });
+    if($("#button_xs").length == 0) {
+      //it doesn't exist
+    }
+    else{
     moveScroller();
+    };
 
-//    $('body').click(function(evt){
-//        var navbar = document.getElementById("mySidenav").style.width;
-//        console.log(navbar);
-//        if(!$(evt.target).is('#mySidenav') && !$(evt.target).is('#button_xs')) {
-//            closeNav();
-//        }
-//    });
     jQuery(document.body).on('click touch', function(e) {
 		var clas = $(e.target)[0].className
-//		console.log(clas);
         if(!clas.includes("noClose")){
             closeNav();
         };
@@ -211,13 +214,17 @@ function moveScroller() {
         var st = $(window).scrollTop();
         var ot = $anchor.offset().top;
         if(st > ot) {
+            var $width = $scroller.parent().width();
             $scroller.css({
                 position: "fixed",
-                top: "0"
+                top: "0",
+                width: $width
             });
         } else {
+            var $width = $scroller.parent().width();
             $scroller.css({
                 position: "relative",
+                width: $width
 
             });
         }
