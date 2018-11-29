@@ -3,18 +3,6 @@
 {% block content %}
 {% load staticfiles %}
 
-	<header id="header">
-		<div class="header-bottom"><!--header-bottom-->
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-3">
-
-					</div>
-				</div>
-			</div>
-		</div><!--/header-bottom-->
-	</header><!--/header-->
-
 	<section id="slider">
 		<div class="container">
 			<div class="row">
@@ -57,27 +45,30 @@
 	<section>
 		<div class="container">
 			<div class="row">
-				<div class="col-md-3 col-sm-12 col-xs-12">
-					<div class="left-sidebar">
-						<h2>PRETRAGA</h2>
-						<div class="panel-group category-products" id="pretraga_scroll">
-							<form id="main-contact-form-search" class="contact-form row">
-								<div class="form-group col-md-6">
-									<input type="text" name="pretraga_svih_artikala" class="form-control" required="required" placeholder="Pretraga..." title=" " formnovalidate>
-								</div>
-								<div class="form-group col-md-6">
-									<button id="pretrazi_artikle" class="btn btn-primary pull-right"><a href="#filter_artikli"> Pretraži</a></button>
-								</div>
+				<div class="col-xs-12">
+					<h3 id="pretraga">PRETRAGA</h3>
+					<div class="panel-group category-products" id="pretraga_scroll">
+						<form id="main-contact-form-search" class="contact-form row">
+							<div class="form-group col-xs-6">
+								<input type="text" id="search-input" name="pretraga_svih_artikala" class="form-control" required="required" placeholder="Pretraga..." title=" " formnovalidate>
+							</div>
+							<div class="form-group col-xs-6">
+								<button id="pretrazi_artikle" class="btn btn-primary pull-right"><a href="#pretraga"> Pretraži</a></button>
+							</div>
 
-							</form>
-						</div>
-						<div id="scroller-anchor"></div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div id="scroller-anchor"></div>
 
-						<button class="btn btn-default noClose" id="button_xs">Filter</button>
-						<div class="sidenav noClose" id="mySidenav">
+					<button class="btn btn-default noClose" id="button_xs">Filter</button>
+					<div class="sidenav noClose" id="mySidenav">
 						<div class="noClose" id="button-anchor"></div>
 						<a href="javascript:void(0)" class="closebtn noClose" onclick="closeNav()" id="closebtn">Zatvori filter</a>
-                        <h2 class="noClose">KATEGORIJE</h2>
+                        <center><h3 class="noClose">KATEGORIJE</h3></center>
                         <div class="panel-group category-products noClose" id="accordian"><!--category-productsr-->
 
                             {% for kategorija in sve_kategorije %}
@@ -167,12 +158,11 @@
 							<hr>
                             {% endfor %}
 						</div><!--/category-products-->
-						</div>
 					</div>
 				</div>
-
-				
-				<div class="col-md-9 col-sm-12 col-xs-12 padding-right" id="svi_artikli">
+			</div>
+			<div class="row">
+				<div class="col-xs-12" id="svi_artikli">
 					<div class="recommended_items"><!--recommended_items-->
 						<h2 class="title text-center">ARTIKLI</h2>
 							<div id="filter_artikli" class="category-tab"><!--category-tab-->
