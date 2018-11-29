@@ -2482,11 +2482,14 @@ h2.title {
     margin-right: 10px;
 }
 
-#search-input{
+#search-input, #pretraga{
     margin-left: 10px;
 }
 
 #slider, #o_nama, #cart_items, #contact-page {
   margin-bottom: 20px;
   margin-top: 50px;
+}
+#korpa{
+    margin-left: 3px;
 }
