@@ -62,6 +62,9 @@ $(document).ready(function () {
 	});
 	// dodaj proizvod u korpu
     jQuery(document.body).on('click touch', '.u_korpu', function() {
+        $(this).click(function() {
+            return false;
+        });
 		var artikal_id = this.id;
 		$.ajax({
 			context: this,
@@ -82,6 +85,7 @@ $(document).ready(function () {
 					flyToElement($(itemImg), $('#korpa'));
 					$("#korpa").html(data.proizvoda_u_korpi);
 					$(this).hide();
+					$('html, body').delay(1000).animate({scrollTop: $("#" + artikal_id).offset().top -100 }, 'slow');
 				}
 			}
 		});
@@ -134,6 +138,9 @@ $(document).ready(function () {
 		$("#pretrazi_artikle").click();
 	});
     $('#pretrazi_artikle').on("click touch",function(){
+        $(this).click(function() {
+            return false;
+        });
     	var pretraga = $('input[name=pretraga_svih_artikala]').val();
     	$('input[name=pretraga_svih_artikala]').val("");
     	if (pretraga != ""){
@@ -188,11 +195,21 @@ $(document).ready(function () {
     jQuery(document.body).on('click touch', function(e) {
 		var clas = $(e.target)[0].className
         if(!clas.includes("noClose")){
+            if($("#mySidenav").length == 0) {
+              //it doesn't exist
+            }
+            else{
             closeNav();
+            };
         };
 
 	});
-
+    $(".delete-form").submit(function() {
+        $(this).submit(function() {
+            return false;
+        });
+        return true;
+    });
 });
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
