@@ -147,7 +147,7 @@ def create_modal(request):
 mail_registracija = """
 <html>
 <body>
-<h3>Poštovani {username},<h3>
+<h3>Poštovani/a {username},<h3>
 
 <p>Vaš nalog na sajtu <a href="http://www.nsmobilplus.com">www.nsmobilplus.com</a> je kreiran, možete krenuti u sigurnu kupovinu.</p>
 <br>
@@ -387,7 +387,7 @@ def korpa_detalji(request, korpa_id):
 mail_korpa = """
 <html>
 <body>
-<h3>Poštovani {username},<h3>
+<h3>Poštovani/a {username},<h3>
 
 <p>Hvala na kupovini!</p>
 <br>
@@ -449,7 +449,7 @@ def potvrdi_korpu(request, korpa_id):
             email.send()
         except Exception as e:
             nova_poruka = Poruke()
-            nova_poruka.user = user
+            nova_poruka.user = request.user
             nova_poruka.tema = "NEUSPESAN E-MAIL PRILIKOM POTVRDJIVANJA KORPE"
             nova_poruka.poruka = "EXCEPTION: {e}".format(e=e)
             nova_poruka.save()
