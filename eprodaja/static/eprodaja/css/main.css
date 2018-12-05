@@ -2430,6 +2430,12 @@ h2.title {
   margin-bottom: 20px;
   margin-top: 50px;
 }
+
 #korpa{
     margin-left: 3px;
+}
+
+.blur{
+  -webkit-filter: blur(5px); /* Chrome, Safari, Opera */
+  filter: blur(5px);
 }
