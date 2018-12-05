@@ -94,6 +94,7 @@ $(document).ready(function () {
        return false;
     });
     $('.pretraga').on("click touch",function(){
+        $("#page_main").addClass("blur");
 		var artikli_za_filter =  $(this).data("id");
 		$.ajax({
 			context: this,
@@ -138,6 +139,7 @@ $(document).ready(function () {
 		$("#pretrazi_artikle").click();
 	});
     $('#pretrazi_artikle').on("click touch",function(){
+        $("#page_main").addClass("blur");
         $(this).click(function() {
             return false;
         });
@@ -210,6 +212,9 @@ $(document).ready(function () {
         });
         return true;
     });
+    $( document ).ajaxComplete(function() {
+        $("#page_main").removeClass("blur");
+    });
 });
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
@@ -249,3 +254,4 @@ function moveScroller() {
     $(window).scroll(move);
     move();
 }
+
