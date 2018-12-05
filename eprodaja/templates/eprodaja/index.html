@@ -2,7 +2,6 @@
 {% block title %}Početna{% endblock %}
 {% block content %}
 {% load staticfiles %}
-
 	<section id="slider">
 		<div class="container">
 			<div class="row">
@@ -77,7 +76,7 @@
 									<h4 class="panel-title noClose">
 										<!--ako ima podkategoriju ili su podkategorija brendovi-->
 										{% if kategorija.podkategorije.all or kategorija.tipovi or kategorija.brendovi %}
-										<a class="pretraga noClose" data-id="kategorija{{ kategorija.id }}" data-toggle="collapse" data-parent="#accordian" href="#{{ kategorija.id }}">
+										<a class="noClose" data-id="kategorija{{ kategorija.id }}" data-toggle="collapse" data-parent="#accordian" href="#{{ kategorija.id }}">
 											<span class="badge pull-right noClose"><i class="fa fa-plus noClose"></i></span>
 											{{ kategorija }}
 										</a>
@@ -95,7 +94,7 @@
 											<li class="noClose">
 												<!--ako ima tip ili brend-->
 												{% if kategorija.tipovi or kategorija.brendovi  %}
-												<a class="pretraga noClose" data-id="kategorija{{ kategorija.id }}_podkategorija{{ podkategorija.id }}" data-toggle="collapse" href="#{{ kategorija.id }}{{ podkategorija.id }}">
+												<a class="noClose" data-id="kategorija{{ kategorija.id }}_podkategorija{{ podkategorija.id }}" data-toggle="collapse" href="#{{ kategorija.id }}{{ podkategorija.id }}">
 													<span class="badge pull-right noClose"><i class="fa fa-plus noClose"></i></span>
 													<b class="noClose">{{ podkategorija.podkategorija }}</b>
 												</a>
@@ -160,7 +159,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row" id="page_main">
 				<div class="col-xs-12" id="svi_artikli">
 					<div class="recommended_items"><!--recommended_items-->
 						<h2 class="title text-center">ARTIKLI</h2>
@@ -249,4 +248,5 @@
 	<div id="modal-artikal" class="modal" tabindex="-1" role="dialog">
 		<!-- popuni ajax -->
 	</div>
+
 {% endblock %}
