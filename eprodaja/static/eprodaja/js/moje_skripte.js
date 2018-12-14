@@ -215,6 +215,17 @@ $(document).ready(function () {
     $( document ).ajaxComplete(function() {
         $("#page_main").removeClass("blur");
     });
+    var myElement = document.getElementById('mySidenav');
+
+    // create a simple instance
+    // by default, it only adds horizontal recognizers
+    var mc = new Hammer(myElement);
+
+    // listen to events...
+    mc.on("swipeleft", function(ev) {
+        closeNav();
+    });
+
 });
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
