@@ -132,6 +132,7 @@ $(document).ready(function () {
 			}
         });
         $(this).effect('highlight',{color: '#ffaa02'},1500);
+        $('html, body').animate({scrollTop: $('#svi_artikli').offset().top -100 }, 'slow');
     });
 
 	$('#main-contact-form-search').submit(function (e) {
