@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import Permission, User
 from django.core.validators import RegexValidator
+from nsmobilplus.settings import SLIKE
 
 
 class Detalji_korisnika(models.Model):
@@ -137,6 +138,7 @@ class Poruke(models.Model):
     poruka = models.TextField(null=True, blank=True)
     datum = models.DateField(auto_now_add=True)
     procitana = models.BooleanField(default=False)
+    file = models.FileField(upload_to=SLIKE)
 
     def __unicode__(self):
         return self.user.username

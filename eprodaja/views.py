@@ -25,20 +25,18 @@ def index(request):
         return render(request, 'eprodaja/under_construction.html', {
             'device_type': device_type
         })
-    user = None
+    user = request.user
     artikli_na_akciji = Artikal.objects.filter(na_akciji=True, na_stanju=True)
     sve_kategorije = Kategorija.objects.all()
     tipovi = Tip.objects.all()
     brendovi = Brend.objects.all()
     random_artikli = Artikal.objects.filter(na_stanju=True, na_akciji=False).order_by('-broj_pregleda')[:15]
 
-    if request.user.is_authenticated():
-        user = request.user
-
-    proizvoda_u_korpi = 0
+    cart = request.session.get('cart', {})
+    proizvoda_u_korpi = len(cart)
     try:
         korpa = user.korpe.get(potvrdjena=False)
-        proizvoda_u_korpi = korpa.ukupno_proizvoda_u_korpi
+        proizvoda_u_korpi += korpa.ukupno_proizvoda_u_korpi
     except:
         pass
 
@@ -56,9 +54,9 @@ def index(request):
 
 def add_artikal(request):
     user = request.user
+    artikal_id = request.GET.get('artikal_id', None)
+    artikal = Artikal.objects.get(pk=artikal_id)
     if user.username != "":
-        artikal_id = request.GET.get('artikal_id', None)
-        artikal = Artikal.objects.get(pk=artikal_id)
         try:
             korpa = user.korpe.get(potvrdjena=False)
         except Korpa.MultipleObjectsReturned:
@@ -75,8 +73,11 @@ def add_artikal(request):
         korpa.save()
         data = {'proizvoda_u_korpi': korpa.ukupno_proizvoda_u_korpi}
     else:
-        messages.add_message(request, messages.INFO, 'Morate biti ulogovani!')
-        data = {'error': True}
+        cart = request.session.get('cart', {})
+        cart[artikal_id] = 1
+        request.session['cart'] = cart
+        # messages.add_message(request, messages.INFO, 'Morate biti ulogovani!')
+        data = {'proizvoda_u_korpi': len(cart)}
     return JsonResponse(data)
     # return HttpResponse(
     #     json.dumps(response_data),
@@ -265,10 +266,10 @@ def logout_user(request):
 
 
 def kontakt(request):
-    user = None
-    proizvoda_u_korpi = 0
-    if request.user.is_authenticated():
-        user = request.user
+    user = request.user
+    cart = request.session.get('cart', {})
+    proizvoda_u_korpi = len(cart)
+    if user != "":
         try:
             korpa = user.korpe.get(potvrdjena=False)
             proizvoda_u_korpi = korpa.ukupno_proizvoda_u_korpi
@@ -283,13 +284,26 @@ def kontakt(request):
         nova_poruka.user = user
         nova_poruka.tema = tema
         nova_poruka.poruka = poruka
+        filepath = request.FILES.get('pic', False)
+        if filepath:
+            slika = request.FILES['pic']
+            nova_poruka.file = slika
         nova_poruka.save()
         messages.warning(request, '{username}, hvala vam što ste nas kontaktirali!'.format(username=username))
         return HttpResponseRedirect(reverse('eprodaja:kontakt'))
     return render(request, 'eprodaja/contact-us.html', {'user': user, 'proizvoda_u_korpi': proizvoda_u_korpi})
 
 def onama(request):
-    return render(request, 'eprodaja/onama.html')
+    user = request.user
+    cart = request.session.get('cart', {})
+    proizvoda_u_korpi = len(cart)
+    if user != "":
+        try:
+            korpa = user.korpe.get(potvrdjena=False)
+            proizvoda_u_korpi = korpa.ukupno_proizvoda_u_korpi
+        except:
+            pass
+    return render(request, 'eprodaja/onama.html', {'user': user, 'proizvoda_u_korpi': proizvoda_u_korpi})
 
 
 def nalog(request, user_id):
@@ -321,60 +335,81 @@ def nalog(request, user_id):
     return render(request, 'eprodaja/account.html', {'user': user, 'korpe': korpe, 'proizvoda_u_korpi': proizvoda_u_korpi})
 
 
-def korpa(request, user_id):
-    user = User.objects.get(pk=user_id)
-    if not user == request.user:
-        return HttpResponseForbidden('<h1><center>Možete pristupiti samo svojim podacima.. <a style="text-decoration: none; color: blue;" href="http://www.nsmobilplus.com">Početna</a></center></h1>')
-    if request.method == 'POST':
-        izmena_na_unosu = False
-        if 'unos' in request.POST:
-            unos_id = request.POST['unos']
-            unos = Entry.objects.get(pk=unos_id)
-            if 'quantity_up' in request.POST:
-                unos.quantity += 1
-                unos.ukupno += unos.artikal.cena
-                unos.save()
-                izmena_na_unosu = True
-            elif 'quantity_down' in request.POST:
-                if unos.quantity <= 1:
-                    pass
-                else:
-                    unos.quantity -= 1
-                    unos.ukupno -= unos.artikal.cena
+def korpa(request):
+    user = request.user
+    # if not user == request.user:
+    #     return HttpResponseForbidden('<h1><center>Možete pristupiti samo svojim podacima.. <a style="text-decoration: none; color: blue;" href="http://www.nsmobilplus.com">Početna</a></center></h1>')
+    if user.username != "":
+        if request.method == 'POST':
+            izmena_na_unosu = False
+            if 'unos' in request.POST:
+                unos_id = request.POST['unos']
+                unos = Entry.objects.get(pk=unos_id)
+                if 'quantity_up' in request.POST:
+                    unos.quantity += 1
+                    unos.ukupno += unos.artikal.cena
                     unos.save()
                     izmena_na_unosu = True
-        if 'brisi_unos' in request.POST:
-            unos_id = request.POST['brisi_unos']
-            unos = Entry.objects.get(pk=unos_id)
-            unos.delete()
-            izmena_na_unosu = True
-        if izmena_na_unosu:
-            korpa = Korpa.objects.get(user=user, potvrdjena=False)
-            unosi = korpa.entry_set.all()
-            proizvoda_u_korpi = 0
-            korpa_ukupno = 0
-            x_exp = (x for x in unosi)
-            for i in x_exp:
-                proizvoda_u_korpi += i.quantity
-                korpa_ukupno += i.ukupno
-            korpa.ukupno_proizvoda_u_korpi = proizvoda_u_korpi
-            korpa.ukupno = korpa_ukupno
+                elif 'quantity_down' in request.POST:
+                    if unos.quantity <= 1:
+                        pass
+                    else:
+                        unos.quantity -= 1
+                        unos.ukupno -= unos.artikal.cena
+                        unos.save()
+                        izmena_na_unosu = True
+            if 'brisi_unos' in request.POST:
+                unos_id = request.POST['brisi_unos']
+                unos = Entry.objects.get(pk=unos_id)
+                unos.delete()
+                izmena_na_unosu = True
+            if izmena_na_unosu:
+                korpa = Korpa.objects.get(user=user, potvrdjena=False)
+                unosi = korpa.entry_set.all()
+                proizvoda_u_korpi = 0
+                korpa_ukupno = 0
+                x_exp = (x for x in unosi)
+                for i in x_exp:
+                    proizvoda_u_korpi += i.quantity
+                    korpa_ukupno += i.ukupno
+                korpa.ukupno_proizvoda_u_korpi = proizvoda_u_korpi
+                korpa.ukupno = korpa_ukupno
+                korpa.save()
+            return HttpResponseRedirect('/korpa/')
+        try:
+            korpa = user.korpe.get(potvrdjena=False)
+        except Korpa.MultipleObjectsReturned:
+            korpa = user.korpe.filter(potvrdjena=False)[0]  # ne sme da se desi
+        except Korpa.DoesNotExist:
+            korpa = Korpa()
+            korpa.user = user
             korpa.save()
-        return HttpResponseRedirect('/korpa/{user_id}'.format(user_id=user_id))
-    try:
-        korpa = Korpa.objects.get(user=user, potvrdjena=False)
+        cart = request.session.get('cart', {})
+        for key, value in cart.iteritems():
+            artikal = Artikal.objects.get(pk=key)
+            unos = Entry(korpa=korpa, artikal=artikal)
+            unos.ukupno = artikal.cena
+            unos.save()
+            korpa.ukupno += artikal.cena
+            korpa.ukupno_proizvoda_u_korpi += 1
+            korpa.save()
+            if key == cart.keys()[-1]:
+                br = len(cart)
+                a = ""
+                o = ""
+                if br != 1 and br != 21 and br != 31 and br != 41 and br != 51:
+                    a = "a"
+                    o = "o"
+                messages.warning(request, '{br} proizvod{a} je dodat{o} u korpu!'.format(br=br, a=a, o=o))
+                del request.session['cart']
         unosi = korpa.entry_set.all()
         proizvoda_u_korpi = korpa.ukupno_proizvoda_u_korpi
-    except Korpa.DoesNotExist:
-        korpa = None
-        unosi = None
-        proizvoda_u_korpi = 0
-
-    return render(request, 'eprodaja/cart.html', {'user': user,
-                                                  'korpa': korpa,
-                                                  'unosi': unosi,
-                                                  'proizvoda_u_korpi': proizvoda_u_korpi})
-
+        return render(request, 'eprodaja/cart.html', {'user': user,
+                                                      'korpa': korpa,
+                                                      'unosi': unosi,
+                                                      'proizvoda_u_korpi': proizvoda_u_korpi})
+    else:
+        return login_user(request)
 
 def korpa_detalji(request, korpa_id):
     korpa = Korpa.objects.get(pk=korpa_id)
