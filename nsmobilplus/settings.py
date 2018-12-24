@@ -26,6 +26,7 @@ SECRET_KEY = 'ck2vo@9c8x$jr%tm58llz_$mgkus_ut3b9m=q98@v!u35-2rwg'
 DEBUG = True
 UNDER_CONSTRUCTION = False
 
+
 ALLOWED_HOSTS = ['*']
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
@@ -141,3 +142,5 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+SLIKE = os.path.join(BASE_DIR, 'media/slike_korisnika')
