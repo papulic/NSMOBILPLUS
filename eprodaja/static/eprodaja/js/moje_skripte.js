@@ -96,6 +96,8 @@ $(document).ready(function () {
     $('.pretraga').on("click touch",function(){
         $("#page_main").addClass("blur");
 		var artikli_za_filter =  $(this).data("id");
+		var kategorija = artikli_za_filter.split("_")[0].split("kategorija")[1];
+		///console.log(kategorija);
 		$.ajax({
 			context: this,
 			url: '/filter/',
@@ -107,6 +109,10 @@ $(document).ready(function () {
 				$("#filter_artikli").html("");
 				if (data.length > 0) {
 					$("#filter_artikli").css('paddingBottom', '0px');
+					if (kategorija == 7){  // BATERIJE id = 7
+                        var line = '<h4 class="title text-center">U cenu je uračunata zamena baterije u našem servisu.</h4>';
+                        $("#filter_artikli").append(line);
+                    }
 					for (i = 0; i < data.length; i++){
 						var line = '<div class="col-md-3 col-sm-6 col-xs-6"> \
                                         <div class="product-image-wrapper"> \
