@@ -110,7 +110,7 @@ $(document).ready(function () {
 				if (data.length > 0) {
 					$("#filter_artikli").css('paddingBottom', '0px');
 					if (kategorija == 7){  // BATERIJE id = 7
-                        var line = '<h4 class="title text-center">U cenu je uračunata zamena baterije u našem servisu.</h4>';
+                        var line = '<h4 class="title text-center">U cenu nije uračunata zamena baterije.</h4>';
                         $("#filter_artikli").append(line);
                     }
 					for (i = 0; i < data.length; i++){
