@@ -146,13 +146,13 @@ $(document).ready(function () {
 		$("#pretrazi_artikle").click();
 	});
     $('#pretrazi_artikle').on("click touch",function(){
-        $("#page_main").addClass("blur");
         $(this).click(function() {
             return false;
         });
     	var pretraga = $('input[name=pretraga_svih_artikala]').val();
     	$('input[name=pretraga_svih_artikala]').val("");
     	if (pretraga != ""){
+    	    $("#page_main").addClass("blur");
             $.ajax({
                 context: this,
                 url: '/pretraga/',
