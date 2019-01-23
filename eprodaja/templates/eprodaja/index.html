@@ -5,7 +5,7 @@
 	<section id="slider">
 		<div class="container">
 			<div class="row">
-			  <div id="slider-carousel" class="carousel slide" data-ride="carousel" data-interval="3000">
+			  <div id="slider-carousel" class="carousel slide" data-ride="carousel">
 				<!-- Indicators -->
 				<ol class="carousel-indicators">
 				  <li data-target="#slider-carousel" data-slide-to="0" class="active"></li>
@@ -16,13 +16,13 @@
 				<!-- Wrapper for slides -->
 				<div class="carousel-inner" role="listbox">
 				  <div class="item active">
-					  <a href="{% url 'eprodaja:kontakt' %}"><img src="{%  static 'eprodaja/images/home/telefon_1.jpg' %}"></a>
+					  <a href="{% url 'eprodaja:kontakt' %}"><img src="{%  static 'eprodaja/images/home/print_case.jpg' %}"></a>
 				  </div>
 				  <div class="item">
-					<img src="{%  static 'eprodaja/images/home/telefon_2.png' %}">
+					<a href="{% url 'eprodaja:kontakt' %}"><img src="{%  static 'eprodaja/images/home/servis.jpg' %}"></a>
 				  </div>
 				  <div class="item">
-					<img src="{%  static 'eprodaja/images/home/telefon_3.jpg' %}">
+					<img src="{%  static 'eprodaja/images/home/telefoni_slider.jpg' %}">
 				  </div>
 				</div>
 
