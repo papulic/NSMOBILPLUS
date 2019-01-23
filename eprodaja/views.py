@@ -305,6 +305,18 @@ def onama(request):
             pass
     return render(request, 'eprodaja/onama.html', {'user': user, 'proizvoda_u_korpi': proizvoda_u_korpi})
 
+def dostava(request):
+    user = request.user
+    cart = request.session.get('cart', {})
+    proizvoda_u_korpi = len(cart)
+    if user != "":
+        try:
+            korpa = user.korpe.get(potvrdjena=False)
+            proizvoda_u_korpi = korpa.ukupno_proizvoda_u_korpi
+        except:
+            pass
+    return render(request, 'eprodaja/dostava.html', {'user': user, 'proizvoda_u_korpi': proizvoda_u_korpi})
+
 
 def nalog(request, user_id):
     user = User.objects.get(pk=user_id)
